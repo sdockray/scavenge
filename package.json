@@ -1,0 +1,27 @@
+{
+  "name": "scavenge",
+  "version": "1.0.0",
+  "description": "Configurable scraping of a website into an other configurable output",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sdockray/scavenge.git"
+  },
+  "keywords": [
+    "scraper",
+    "archiver",
+    "nodejs"
+  ],
+  "author": "Sean Dockray",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sdockray/scavenge/issues"
+  },
+  "homepage": "https://github.com/sdockray/scavenge#readme",
+  "dependencies": {
+    "osmosis": "^1.1.4"
+  }
+}

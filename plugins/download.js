@@ -20,38 +20,37 @@ function download (data, config) {
         var filepath = (config.filepath) ? tpl(config.filepath, data) : undefined
         var dir = (config.directory) ? tpl(config.directory, data) : undefined
         var overwrite = !(_.has(config, 'overwrite') && config.overwrite === false)
-        console.log('overwrite', overwrite)
         if (filepath) {
           if (!overwrite && fs.existsSync(filepath)) {
-            console.log('SKIPPING')
             resolve(data)
+          } else {
+            mkdirp(path.dirname(filepath), function (err) {
+              if (err) console.error(err)
+              // Stream downloaded file into filesystem
+              console.log('Downloading', url, 'to', filepath)
+              var req = request(url)
+              var file = fs.createWriteStream(filepath)
+              req.pipe(file)
+              file.on('error', reject)
+              file.on('close', () => resolve(data))
+            })
           }
-          mkdirp(path.dirname(filepath), function (err) {
-            if (err) console.error(err)
-            // Stream downloaded file into filesystem
-            console.log('Downloading', url, 'to', filepath)
-            var req = request(url)
-            var file = fs.createWriteStream(filepath)
-            req.pipe(file)
-            file.on('error', reject)
-            file.on('close', () => resolve(data))
-          })
         } else if (dir) {
           mkdirp(dir, function (err) {
             if (err) console.error(err)
             var filename = path.basename(url)
             filepath = path.join(dir, filename)
             if (!overwrite && fs.existsSync(filepath)) {
-              console.log('SKIPPING')
               resolve(data)
+            } else {
+              // Stream downloaded file into filesystem
+              console.log('Downloading', url, 'to', filepath)
+              var req = request(url)
+              var file = fs.createWriteStream(filepath)
+              req.pipe(file)
+              file.on('error', reject)
+              file.on('close', () => resolve(data))
             }
-            // Stream downloaded file into filesystem
-            console.log('Downloading', url, 'to', filepath)
-            var req = request(url)
-            var file = fs.createWriteStream(filepath)
-            req.pipe(file)
-            file.on('error', reject)
-            file.on('close', () => resolve(data))
           })
         }
       } else {

@@ -1,6 +1,6 @@
 {
   "origin": "http://ro.uow.edu.au/ozsydney/",
-  "find": "ul#gallery_items li:nth-child(3) .content_block",
+  "find": "ul#gallery_items li:nth-child(4) .content_block",
   "variables": {
     "title": "h2 > a",
     "date": "#mag_pubdate",
@@ -15,7 +15,7 @@
     }
   },
   "actions": {
-    "mock": [
+    "download": [
       {
         "url": "${pdf}",
         "filepath": "OZ/${title} (${date})/${title}.pdf",
@@ -23,7 +23,8 @@
       },
       {
         "url": "${cover}",
-        "filepath": "OZ/${title} (${date})/cover.jpg"
+        "filepath": "OZ/${title} (${date})/cover.jpg",
+        "overwrite": false
       }
     ]
   }

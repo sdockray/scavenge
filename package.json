@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/sdockray/scavenge#readme",
   "dependencies": {
+    "lodash": "^4.17.4",
     "osmosis": "^1.1.4"
   },
   "devDependencies": {

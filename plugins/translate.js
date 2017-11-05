@@ -29,7 +29,7 @@ function translate (data, config) {
 }
 
 module.exports = {
-  onStart: () => {},
+  onStart: a => a,
   onData: translate,
-  onEnd: () => {}
+  onEnd: a => a
 }

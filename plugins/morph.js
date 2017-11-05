@@ -1,14 +1,32 @@
 var sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('data.sqlite')
 
-function morph (data, options) {
+function start (instructions, options) {
   return new Promise((resolve, reject) => {
-    const columns = options.columns.reduce((p, v, i, s) => `${p}${v} TEXT${i < s.length - 1 ? ', ' : ''}`, '')
     try {
       db.serialize(() => {
-        db.run(`CREATE TABLE IF NOT EXISTS data (${columns})`)
-        const toInsert = options.columns.map(key => data[key])
-        var statement = db.prepare(`INSERT INTO data (${options.columns.join(',')}) VALUES (${Array(options.columns.length).fill('?')})`)
+        db.run('DROP TABLE IF EXISTS data')
+        const columns = options.columns.join(' TEXT, ')
+        console.log('columns', columns)
+        db.run(`CREATE TABLE IF NOT EXISTS data (${columns} TEXT)`, () => {
+          resolve(instructions)
+        })
+      })
+    } catch (e) {
+      console.log('!!!!!!', e)
+      resolve(instructions)
+    }
+  })
+}
+
+function saveData (data, options) {
+  return new Promise((resolve, reject) => {
+    try {
+      db.serialize(() => {
+        const columns = options.columns
+        const placeholders = Array(columns.length).fill('?').join(',')
+        const toInsert = columns.map(key => data[key])
+        var statement = db.prepare(`INSERT INTO data (${columns.join(',')}) VALUES (${placeholders})`)
         statement.run(...toInsert)
         statement.finalize(() => {
           resolve(data)
@@ -22,7 +40,7 @@ function morph (data, options) {
 }
 
 module.exports = {
-  onStart: () => {},
-  onData: morph,
-  onEnd: () => {}
+  onStart: start,
+  onData: saveData,
+  onEnd: a => a
 }

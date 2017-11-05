@@ -36,7 +36,7 @@ function fileDownload (data, config) {
 }
 
 module.exports = {
-  onStart: () => {},
+  onStart: a => a,
   onData: fileDownload,
-  onEnd: () => {}
+  onEnd: a => a
 }

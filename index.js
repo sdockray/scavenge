@@ -49,10 +49,10 @@ var instructionsVictoria = {
     "morph": {
       columns: ["pdf", "day", "month", "year"]
     },
-    "fileDownload": {
-      "url": "https://www.parliament.vic.gov.au/${pdf}",
-      "directory": "${year}"
-    }
+    // "fileDownload": {
+    //   "url": "https://www.parliament.vic.gov.au/${pdf}",
+    //   "directory": "${year}"
+    // }
   }
 }
 
@@ -82,36 +82,60 @@ function tryToRequire (name) {
   }
 }
 
-const execute = (name, options) => (data) => {
-  let action = tryToRequire(`scavenge-plugin-${name}`)
-  if (!action) action = tryToRequire(name)
-  if (!action) action = tryToRequire(`./plugins/${name}`)
-
-  if (!action) console.warn('Could not resolve', name)
-  else if (typeof action === 'function') {
-    return action.onData(data, options)
+function resolvePlugin (options, name) {
+  let plugin = tryToRequire(`scavenge-plugin-${name}`)
+  if (!plugin) plugin = tryToRequire(name)
+  if (!plugin) plugin = tryToRequire(`./plugins/${name}`)
+  if (!plugin) {
+    console.warn('Could not resolve', name)
+    return null
   }
-  console.warn(name, 'is not a function')
-  return data
+  return _.extend(plugin, { options })
 }
 
-function executeActions (data, actions) {
-  return _.keys(actions).reduce(
-    (promise, actionName) => promise.then(execute(actionName, actions[actionName])),
+var executeMethod = (plugins, name, event) => (previousData) => {
+  const plugin = plugins[name]
+  if (!plugin) return previousData
+  const action = plugin[event]
+  if (typeof action !== 'function') {
+    console.warn(name, '->', event, 'is not a function.')
+    return previousData
+  }
+  return action(previousData, plugin.options)
+}
+
+function execute (data, plugins, event) {
+  return _.keys(plugins).reduce(
+    (promise, name) => promise.then(executeMethod(plugins, name, event)),
     Promise.resolve(data)
   )
 }
 
 function go (instructions) {
+  // require action plugins
+  const plugins = _.mapValues(instructions.actions, resolvePlugin)
   console.log('Starting to scavenge:', instructions.origin)
-  var o = osmosis.get(instructions.origin)
-  o = whatsHere(o, instructions)
-  o.data((data) => {
-    executeActions(data, instructions.actions)
-      .then((results) => {
-        console.log(results)
+  // start actions
+  execute(instructions, plugins, 'onStart')
+    .then((transformedInstructions) => {
+      console.log(transformedInstructions)
+      var o = osmosis.get(transformedInstructions.origin)
+      o = whatsHere(o, transformedInstructions)
+      o.then((context, data, next) => {
+        execute(_.clone(data), plugins, 'onData')
+          .then((results) => {
+            console.log(results)
+          })
+          .then(next)
       })
-  })
+      .done(() => {
+        execute(null, plugins, 'onEnd')
+          .then(() => {
+            console.log('DONE!')
+          })
+      })
+    })
+    .catch(e => console.log('eeerrr', e))
   /*
   o.log(console.log)
   .error(console.log)
@@ -122,6 +146,6 @@ function go (instructions) {
 go(instructionsVictoria)
 /*
 executeActions(
-  { url: 'http://ro.uow.edu.au/cgi/viewcontent.cgi?article=1004&context=ozsydney' }, 
+  { url: 'http://ro.uow.edu.au/cgi/viewcontent.cgi?article=1004&context=ozsydney' },
   { fileDownload: { url: "${url}", directory: "data" }})
 */

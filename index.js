@@ -48,6 +48,10 @@ var instructionsVictoria = {
     },
     "morph": {
       columns: ["pdf", "day", "month", "year"]
+    },
+    "fileDownload": {
+      "url": "https://www.parliament.vic.gov.au/${pdf}",
+      "directory": "${year}"
     }
   }
 }
@@ -105,7 +109,7 @@ function go (instructions) {
   o.data((data) => {
     executeActions(data, instructions.actions)
       .then((results) => {
-        console.log('listing', results)
+        console.log(results)
       })
   })
   /*
@@ -116,6 +120,8 @@ function go (instructions) {
 }
 
 go(instructionsVictoria)
-
-// execute('fileDownload', { url: "${url}" }, [{ url: 'http://google.com/abc/something.pdf' }])
-// executeActions({ url: 'http://google.com/abc/something.pdf' }, { fileDownload: { url: "${url}" }})
+/*
+executeActions(
+  { url: 'http://ro.uow.edu.au/cgi/viewcontent.cgi?article=1004&context=ozsydney' }, 
+  { fileDownload: { url: "${url}", directory: "data" }})
+*/

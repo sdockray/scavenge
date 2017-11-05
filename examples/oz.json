@@ -15,7 +15,7 @@
     }
   },
   "actions": {
-    "mock": [
+    "download": [
       {
         "url": "${pdf}",
         "filepath": "OZ/${title} (${date})/${title}.pdf",

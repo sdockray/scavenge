@@ -95,8 +95,7 @@ function executeActions (data, actions) {
   )
 }
 
-function go () {
-  var instructions = instructionsVictoria
+function go (instructions) {
   console.log('Starting to scavenge:', instructions.origin)
   var o = osmosis.get(instructions.origin)
   o = whatsHere(o, instructions)
@@ -113,7 +112,7 @@ function go () {
   */
 }
 
-// go()
+go(instructionsVictoria)
 
 // execute('fileDownload', { url: "${url}" }, [{ url: 'http://google.com/abc/something.pdf' }])
-executeActions({ url: 'http://google.com/abc/something.pdf' }, { fileDownload: { url: "${url}" }})
+// executeActions({ url: 'http://google.com/abc/something.pdf' }, { fileDownload: { url: "${url}" }})

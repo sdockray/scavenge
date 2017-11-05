@@ -113,4 +113,7 @@ function go () {
   */
 }
 
-go()
+// go()
+
+// execute('fileDownload', { url: "${url}" }, [{ url: 'http://google.com/abc/something.pdf' }])
+executeActions({ url: 'http://google.com/abc/something.pdf' }, { fileDownload: { url: "${url}" }})

@@ -10,20 +10,16 @@ var tpl = utils.tpl
   directory: specify a directory name
  */
 
-
 function mkdir (data, config) {
   return new Promise((resolve, reject) => {
-    try {
-      if (config.directory) {
-        var dir = (config.directory) ? tpl(config.directory, data) : undefined
-        if (dir) {
-          mkdirp(dir)
-        }
-      }
-      resolve(data)
-    } catch (e) {
-      resolve(data)
+    if (config.directory) {
+      var dir = tpl(config.directory, data)
+      mkdirp(dir, (err) => {
+        if (err) return reject(err)
+        resolve(data)
+      })
     }
+    resolve(data)
   })
 }
 

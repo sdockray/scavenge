@@ -36,7 +36,7 @@ var instructionsVictoria = {
     }
   },
   "actions": {
-    "./plugins/translate": {
+    "translate": {
       "pdf": [{
         "match": "(\\d+)_([A-Za-z]+)_(\\d+)\\.pdf",
         "to": {
@@ -67,15 +67,26 @@ function whatsHere (o, conf) {
   return o
 }
 
+function tryToRequire (name) {
+  try {
+    return require(name)
+  } catch (e) {
+    return null
+  }
+}
+
 function executeActions (data, actions) {
   return _.keys(actions).reduce((prev, actionName) => {
-    try {
-      var action = require(actionName)
+    let action = tryToRequire(`scavenge-plugin-${actionName}`)
+    if (!action) action = tryToRequire(actionName)
+    if (!action) action = tryToRequire(`./plugins/${actionName}`)
+
+    if (!action) console.warn('Could not resolve', actionName)
+    else if (typeof action === 'function') {
       return action(prev, actions[actionName])
-    } catch (e) {
-      console.warn('Could not resolve', actionName)
-      return prev
     }
+    console.warn(actionName, 'is not a function')
+    return prev
   }, data)
 }
 

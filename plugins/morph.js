@@ -1,14 +1,26 @@
 var sqlite3 = require('sqlite3').verbose()
-const db = new sqlite3.Database('data.sqlite')
+
+/*
+  Config options
+  file: name of db - defaults to data.sqlite
+  table: name of table - defaults to data
+  columns: list of variable names to include as columns in the table
+ */
+
+let db
 
 function start (instructions, options) {
   return new Promise((resolve, reject) => {
     try {
+      db = new sqlite3.Database(options.name || 'data.sqlite')
       db.serialize(() => {
-        db.run('DROP TABLE IF EXISTS data')
+        const table = options.table || 'data'
+        if (options.refesh) {
+          db.run(`DROP TABLE IF EXISTS ${table}`)
+        }
         const columns = options.columns.join(' TEXT, ')
         console.log('columns', columns)
-        db.run(`CREATE TABLE IF NOT EXISTS data (${columns} TEXT)`, () => {
+        db.run(`CREATE TABLE IF NOT EXISTS ${table} (${columns} TEXT)`, () => {
           resolve(instructions)
         })
       })
@@ -20,13 +32,14 @@ function start (instructions, options) {
 }
 
 function saveData (data, options) {
+  const table = options.table || 'data'
   return new Promise((resolve, reject) => {
     try {
       db.serialize(() => {
         const columns = options.columns
         const placeholders = Array(columns.length).fill('?').join(',')
         const toInsert = columns.map(key => data[key])
-        var statement = db.prepare(`INSERT INTO data (${columns.join(',')}) VALUES (${placeholders})`)
+        var statement = db.prepare(`INSERT INTO ${table} (${columns.join(',')}) VALUES (${placeholders})`)
         statement.run(...toInsert)
         statement.finalize(() => {
           resolve(data)

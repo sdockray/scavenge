@@ -75,19 +75,24 @@ function tryToRequire (name) {
   }
 }
 
-function executeActions (data, actions) {
-  return _.keys(actions).reduce((prev, actionName) => {
-    let action = tryToRequire(`scavenge-plugin-${actionName}`)
-    if (!action) action = tryToRequire(actionName)
-    if (!action) action = tryToRequire(`./plugins/${actionName}`)
+const execute = (name, options) => (data) => {
+  let action = tryToRequire(`scavenge-plugin-${name}`)
+  if (!action) action = tryToRequire(name)
+  if (!action) action = tryToRequire(`./plugins/${name}`)
 
-    if (!action) console.warn('Could not resolve', actionName)
-    else if (typeof action === 'function') {
-      return action(prev, actions[actionName])
-    }
-    console.warn(actionName, 'is not a function')
-    return prev
-  }, data)
+  if (!action) console.warn('Could not resolve', name)
+  else if (typeof action === 'function') {
+    return action(data, options)
+  }
+  console.warn(name, 'is not a function')
+  return data
+}
+
+function executeActions (data, actions) {
+  return _.keys(actions).reduce(
+    (promise, actionName) => promise.then(execute(actionName, actions[actionName])),
+    Promise.resolve(data)
+  )
 }
 
 function go () {
@@ -96,8 +101,10 @@ function go () {
   var o = osmosis.get(instructions.origin)
   o = whatsHere(o, instructions)
   o.data((data) => {
-    var results = executeActions(data, instructions.actions)
-    console.log('listing', results)
+    executeActions(data, instructions.actions)
+      .then((results) => {
+        console.log('listing', results)
+      })
   })
   /*
   o.log(console.log)

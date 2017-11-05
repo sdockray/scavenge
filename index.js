@@ -35,15 +35,17 @@ var instructionsVictoria = {
       "pdf": "@href"
     }
   },
-  "translations": {
-    "pdf": [{
-      "match": "(\\d+)_([A-Za-z]+)_(\\d+)\\.pdf",
-      "to": {
-        "day": "$1",
-        "month": "$2",
-        "year": "$3"
-      }
-    }]
+  "actions": {
+    "./plugins/translate": {
+      "pdf": [{
+        "match": "(\\d+)_([A-Za-z]+)_(\\d+)\\.pdf",
+        "to": {
+          "day": "$1",
+          "month": "$2",
+          "year": "$3"
+        }
+      }]
+    }
   }
 }
 
@@ -65,36 +67,16 @@ function whatsHere (o, conf) {
   return o
 }
 
-function convertMatchToString (match, template) {
-  return match.reduce((prev, group, index) => {
-    return prev.replace(new RegExp(`\\$${index}`, 'g'), group)
-  }, template)
-}
-
-function translate (config, cb) {
-  return (data) => {
-    // console.log('raw data', data)
-    _.each(config, (optionList, variable) => {
-      const toTranslate = data[variable]
-      if (toTranslate && typeof toTranslate === 'string') {
-        optionList.forEach((options) => {
-          var re = new RegExp(options.match)
-          var match = toTranslate.match(re)
-          if (match) {
-            _.each(options.to, (translator, newVariable) => {
-              data[newVariable] = convertMatchToString(match, translator)
-            })
-          } else {
-            console.log('no match for', options.match, 'in', toTranslate)
-          }
-        })
-      } else {
-        console.log('warning', variable, 'is was not found and cannot be translated')
-      }
-    })
-    // return transformed data
-    cb(data)
-  }
+function executeActions (data, actions) {
+  return _.keys(actions).reduce((prev, actionName) => {
+    try {
+      var action = require(actionName)
+      return action(prev, actions[actionName])
+    } catch (e) {
+      console.warn('Could not resolve', actionName)
+      return prev
+    }
+  }, data)
 }
 
 function go () {
@@ -102,9 +84,10 @@ function go () {
   console.log('Starting to scavenge:', instructions.origin)
   var o = osmosis.get(instructions.origin)
   o = whatsHere(o, instructions)
-  o.data(translate(instructions.translations, (listing) => {
-    console.log('listing', listing)
-  }))
+  o.data((data) => {
+    var results = executeActions(data, instructions.actions)
+    console.log('listing', results)
+  })
   /*
   o.log(console.log)
   .error(console.log)

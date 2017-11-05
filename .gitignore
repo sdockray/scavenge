@@ -5,5 +5,5 @@ members/
 node_modules/
 *.log
 .dat
-
+OZ/
 data.sqlite

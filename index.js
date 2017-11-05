@@ -117,8 +117,10 @@ goJsonFile('./examples/oz.json')
 /*
 var download = require('./plugins/download')
 download.onData(
-  // { url: 'http://ro.uow.edu.au/cgi/viewcontent.cgi?article=1004&context=ozsydney' },
-  // { fileDownload: { url: "${url}", directory: "data" }})
+  { pdf: 'http://ro.uow.edu.au/cgi/viewcontent.cgi?article=1004&context=ozsydney' },
+  { url: "${pdf}",
+    directory: "OZ/"
+  })
   {
     year: '2017',
     yearUrl: '/hansard/daily-hansard/3389-council-2017',

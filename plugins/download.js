@@ -2,6 +2,7 @@ var request = require('request')
 var path = require('path')
 var mkdirp = require('mkdirp')
 var fs = require('fs')
+var _ = require('lodash')
 var utils = require('../utils')
 var tpl = utils.tpl
 
@@ -18,7 +19,13 @@ function download (data, config) {
         var url = tpl(config.url, data)
         var filepath = (config.filepath) ? tpl(config.filepath, data) : undefined
         var dir = (config.directory) ? tpl(config.directory, data) : undefined
+        var overwrite = !(_.has(config, 'overwrite') && config.overwrite === false)
+        console.log('overwrite', overwrite)
         if (filepath) {
+          if (!overwrite && fs.existsSync(filepath)) {
+            console.log('SKIPPING')
+            resolve(data)
+          }
           mkdirp(path.dirname(filepath), function (err) {
             if (err) console.error(err)
             // Stream downloaded file into filesystem
@@ -34,6 +41,10 @@ function download (data, config) {
             if (err) console.error(err)
             var filename = path.basename(url)
             filepath = path.join(dir, filename)
+            if (!overwrite && fs.existsSync(filepath)) {
+              console.log('SKIPPING')
+              resolve(data)
+            }
             // Stream downloaded file into filesystem
             console.log('Downloading', url, 'to', filepath)
             var req = request(url)

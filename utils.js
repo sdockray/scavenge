@@ -12,7 +12,7 @@ function index (obj, is, value) {
 }
 
 function tpl (str, obj) {
-  console.log(obj)
+  // console.log(obj)
   return str.replace(/\$\{(.+?)\}/g, (match, p1) => { return index(obj, p1) })
 }
 

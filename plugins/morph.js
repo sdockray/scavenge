@@ -19,7 +19,6 @@ function start (instructions, options) {
           db.run(`DROP TABLE IF EXISTS ${table}`)
         }
         const columns = options.columns.join(' TEXT, ')
-        console.log('columns', columns)
         db.run(`CREATE TABLE IF NOT EXISTS ${table} (${columns} TEXT)`, () => {
           resolve(instructions)
         })

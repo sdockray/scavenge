@@ -70,12 +70,12 @@ function go (instructions) {
       console.log(transformedInstructions)
       var o = osmosis.get(transformedInstructions.origin)
       o = whatsHere(o, transformedInstructions)
-      o.then((context, data, next) => {
+      o.then((context, data, next, done) => {
         execute(_.clone(data), plugins, 'onData')
           .then((results) => {
-            console.log(results)
+            console.log('getting some where!')
           })
-          .then(next)
+          .then(done)
       })
       .done(() => {
         execute(null, plugins, 'onEnd')
@@ -103,16 +103,16 @@ function goJsonFile (name) {
 }
 
 // Testing entry point
-// goJsonFile('./examples/oz.json')
+goJsonFile('./examples/oz.json')
 
-var download = require('./plugins/download')
-download.onData(
-  { pdf: 'http://ro.uow.edu.au/cgi/viewcontent.cgi?article=1004&context=ozsydney' },
-  { url: "${pdf}",
-    filepath: "OZ/issue.pdf"
-  }).then(()=> {
-    console.log('fdsfdsfsdf');
-  })
+// var download = require('./plugins/download')
+// download.onData(
+//   { pdf: 'http://ro.uow.edu.au/cgi/viewcontent.cgi?article=1004&context=ozsydney' },
+//   { url: "${pdf}",
+//     filepath: "OZ/issue.pdf"
+//   }).then(()=> {
+//     console.log('fdsfdsfsdf');
+//   })
 
 /*
 var download = require('./plugins/download')

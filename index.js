@@ -103,7 +103,16 @@ function goJsonFile (name) {
 }
 
 // Testing entry point
-goJsonFile('./examples/oz.json')
+// goJsonFile('./examples/oz.json')
+
+var download = require('./plugins/download')
+download.onData(
+  { pdf: 'http://ro.uow.edu.au/cgi/viewcontent.cgi?article=1004&context=ozsydney' },
+  { url: "${pdf}",
+    filepath: "OZ/issue.pdf"
+  }).then(()=> {
+    console.log('fdsfdsfsdf');
+  })
 
 /*
 var download = require('./plugins/download')

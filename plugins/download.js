@@ -24,9 +24,10 @@ function download (data, config) {
             // Stream downloaded file into filesystem
             console.log('Downloading', url, 'to', filepath)
             var req = request(url)
-            req.pipe(fs.createWriteStream(filepath))
-            req.on('error', reject)
-            req.on('close', () => resolve(data))
+            var file = fs.createWriteStream(filepath)
+            req.pipe(file)
+            file.on('error', reject)
+            file.on('close', () => resolve(data))
           })
         } else if (dir) {
           mkdirp(dir, function (err) {
@@ -36,9 +37,10 @@ function download (data, config) {
             // Stream downloaded file into filesystem
             console.log('Downloading', url, 'to', filepath)
             var req = request(url)
-            req.pipe(fs.createWriteStream(filepath))
-            req.on('error', reject)
-            req.on('close', () => resolve(data))
+            var file = fs.createWriteStream(filepath)
+            req.pipe(file)
+            file.on('error', reject)
+            file.on('close', () => resolve(data))
           })
         }
       } else {

@@ -11,26 +11,34 @@ var tpl = utils.tpl
   directory: specify a directory for the downloaded file
  */
 
-
 function download (data, config) {
   return new Promise((resolve, reject) => {
     try {
       if (config.url) {
         var url = tpl(config.url, data)
-        var filepath = (config.filepath) ? tpl(config.filename, data) : undefined
+        var filepath = (config.filepath) ? tpl(config.filepath, data) : undefined
         var dir = (config.directory) ? tpl(config.directory, data) : undefined
         if (filepath) {
-          mkdirp(path.dirname(filepath))
+          mkdirp(path.dirname(filepath), function (err) {
+            if (err) console.error(err)
+            // Stream downloaded file into filesystem
+            console.log('Downloading', url, 'to', filepath)
+            request(url).pipe(fs.createWriteStream(filepath))
+          })
         } else if (dir) {
-          mkdirp(dir)
-          var filename = path.basename(url)
-          filepath = path.join(dir, filename)
+          mkdirp(dir, function (err) {
+            if (err) console.error(err)
+            var filename = path.basename(url)
+            filepath = path.join(dir, filename)
+            // Stream downloaded file into filesystem
+            console.log('Downloading', url, 'to', filepath)
+            request(url).pipe(fs.createWriteStream(filepath))
+          })
         }
-        // Stream downloaded file into filesystem
-        request(url).pipe(fs.createWriteStream(filepath))
       }
       resolve(data)
     } catch (e) {
+      console.log(e)
       resolve(data)
     }
   })
@@ -38,6 +46,6 @@ function download (data, config) {
 
 module.exports = {
   onStart: a => a,
-  onData: fileDownload,
+  onData: download,
   onEnd: a => a
 }

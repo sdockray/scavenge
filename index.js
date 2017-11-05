@@ -45,7 +45,11 @@ var executeMethod = (plugins, name, event) => (previousData) => {
     console.warn(name, '->', event, 'is not a function.')
     return previousData
   }
-  return action(previousData, plugin.options)
+  if (_.isArray(plugin.options)) {
+    return plugin.options.reduce((p, o) => p.then(d => action(d, o)), Promise.resolve(previousData))
+  } else {
+    return action(previousData, plugin.options)
+  }
 }
 
 function execute (data, plugins, event) {

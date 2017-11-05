@@ -21,4 +21,8 @@ function morph (data, options) {
   })
 }
 
-module.exports = morph
+module.exports = {
+  onStart: () => {},
+  onData: morph,
+  onEnd: () => {}
+}

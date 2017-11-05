@@ -85,7 +85,7 @@ const execute = (name, options) => (data) => {
 
   if (!action) console.warn('Could not resolve', name)
   else if (typeof action === 'function') {
-    return action(data, options)
+    return action.onData(data, options)
   }
   console.warn(name, 'is not a function')
   return data

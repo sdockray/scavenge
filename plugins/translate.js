@@ -28,4 +28,8 @@ function translate (data, config) {
   return data
 }
 
-module.exports = translate
+module.exports = {
+  onStart: () => {},
+  onData: translate,
+  onEnd: () => {}
+}

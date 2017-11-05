@@ -23,7 +23,8 @@
   "homepage": "https://github.com/sdockray/scavenge#readme",
   "dependencies": {
     "lodash": "^4.17.4",
-    "osmosis": "^1.1.4"
+    "osmosis": "^1.1.4",
+    "sqlite3": "^3.1.13"
   },
   "devDependencies": {
     "standard": "^10.0.3"

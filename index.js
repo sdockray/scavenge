@@ -42,9 +42,12 @@ var instructionsVictoria = {
         "to": {
           "day": "$1",
           "month": "$2",
-          "year": "$3"
+          "year": "$3",
         }
       }]
+    },
+    "morph": {
+      columns: ["pdf", "day", "month", "year"]
     }
   }
 }

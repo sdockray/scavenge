@@ -1,64 +1,8 @@
 var _ = require('lodash')
 var osmosis = require('osmosis')
 
-// OZ Magazine
-var instructionsOz = {
-  "origin": "http://ro.uow.edu.au/ozsydney/",
-  "find": "ul#gallery_items li .content_block",
-  "variables": {
-    "title": "h2 > a",
-    "date": "#mag_pubdate",
-    "cover": ".cover img@src",
-    "info": ".cover@href"
-  },
-  "next": {
-    "follow": ".cover@href",
-    "find": "#alpha",
-    "variables": {
-      "pdf": "#alpha-pdf@href"
-    }
-  }
-}
-
-// State Parliament of Victoria Hansard documents
-var instructionsVictoria = {
-  "origin": "https://www.parliament.vic.gov.au/hansard/daily-hansard",
-  "find": "#middle article table tr:nth-child(2) td:nth-child(1)",
-  "variables": {
-    "year": "ul li a",
-    "yearUrl": "ul li a@href"
-  },
-  "next": {
-    "follow": "ul li a@href",
-    "find": "table.dl-hansard tbody tr td a",
-    "variables": {
-      "pdf": "@href"
-    }
-  },
-  "actions": {
-    "translate": {
-      "pdf": [{
-        "match": "(\\d+)_([A-Za-z]+)_(\\d+)\\.pdf",
-        "to": {
-          "day": "$1",
-          "month": "$2",
-          "year": "$3",
-        }
-      }]
-    },
-    "morph": {
-      columns: ["pdf", "day", "month", "year"]
-    },
-    // "fileDownload": {
-    //   "url": "https://www.parliament.vic.gov.au/${pdf}",
-    //   "directory": "${year}"
-    // }
-  }
-}
-
 //
 function whatsHere (o, conf) {
-  console.log('whatsHere()')
   if (conf.find) {
     o = o.find(conf.find)
   }
@@ -111,6 +55,7 @@ function execute (data, plugins, event) {
   )
 }
 
+// Instructions are a JSON object describing the scavenge task
 function go (instructions) {
   // require action plugins
   const plugins = _.mapValues(instructions.actions, resolvePlugin)
@@ -143,9 +88,30 @@ function go (instructions) {
   */
 }
 
-go(instructionsVictoria)
+// Loads an external JSON file with scavenging instructions
+function goJsonFile (name) {
+  var instructions = tryToRequire(name)
+  if (instructions) {
+    go(instructions)
+  } else {
+    console.warn('Could not load JSON configuration', name)
+  }
+}
+
+// Testing entry point
+goJsonFile('./examples/oz.json')
+
 /*
-executeActions(
-  { url: 'http://ro.uow.edu.au/cgi/viewcontent.cgi?article=1004&context=ozsydney' },
-  { fileDownload: { url: "${url}", directory: "data" }})
+var download = require('./plugins/download')
+download.onData(
+  // { url: 'http://ro.uow.edu.au/cgi/viewcontent.cgi?article=1004&context=ozsydney' },
+  // { fileDownload: { url: "${url}", directory: "data" }})
+  {
+    year: '2017',
+    yearUrl: '/hansard/daily-hansard/3389-council-2017',
+    pdf: '/images/stories/daily-hansard/Council_2017/Council_Daily_Extract_Friday_20_October_2017_from_Book_17.pdf' },
+  {
+    url: "https://www.parliament.vic.gov.au/${pdf}",
+    directory: "${year}"
+  })
 */

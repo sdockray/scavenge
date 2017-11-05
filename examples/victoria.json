@@ -1,0 +1,33 @@
+{
+  "origin": "https://www.parliament.vic.gov.au/hansard/daily-hansard",
+  "find": "#middle article table tr:nth-child(2) td:nth-child(1)",
+  "variables": {
+    "year": "ul li a",
+    "yearUrl": "ul li a@href"
+  },
+  "next": {
+    "follow": "ul li a@href",
+    "find": "table.dl-hansard tbody tr td a",
+    "variables": {
+      "pdf": "@href"
+    }
+  },
+  "actions": {
+    "translate": {
+      "pdf": [{
+        "match": "(\\d+)_([A-Za-z]+)_(\\d+)\\.pdf",
+        "to": {
+          "day": "$1",
+          "month": "$2"
+        }
+      }]
+    },
+    "morph": {
+      "columns": ["pdf", "day", "month", "year"]
+    },
+    "download": {
+      "url": "https://www.parliament.vic.gov.au/${pdf}",
+      "directory": "${year}"
+    }
+  }
+}

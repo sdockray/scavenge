@@ -1,0 +1,22 @@
+{
+  "origin": "http://ro.uow.edu.au/ozsydney/",
+  "find": "ul#gallery_items li .content_block",
+  "variables": {
+    "title": "h2 > a",
+    "date": "#mag_pubdate",
+    "cover": ".cover img@src",
+    "info": ".cover@href"
+  },
+  "next": {
+    "follow": ".cover@href",
+    "find": "#alpha",
+    "variables": {
+      "pdf": "#alpha-pdf@href"
+    }
+  },
+  "actions": {
+    "mkdir": {
+      "directory": "OZ/${title} (${date})"
+    }
+  }
+}

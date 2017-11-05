@@ -23,7 +23,10 @@ function download (data, config) {
             if (err) console.error(err)
             // Stream downloaded file into filesystem
             console.log('Downloading', url, 'to', filepath)
-            request(url).pipe(fs.createWriteStream(filepath))
+            var req = request(url)
+            req.pipe(fs.createWriteStream(filepath))
+            req.on('error', reject)
+            req.on('close', () => resolve(data))
           })
         } else if (dir) {
           mkdirp(dir, function (err) {
@@ -32,14 +35,18 @@ function download (data, config) {
             filepath = path.join(dir, filename)
             // Stream downloaded file into filesystem
             console.log('Downloading', url, 'to', filepath)
-            request(url).pipe(fs.createWriteStream(filepath))
+            var req = request(url)
+            req.pipe(fs.createWriteStream(filepath))
+            req.on('error', reject)
+            req.on('close', () => resolve(data))
           })
         }
+      } else {
+        resolve(data)
       }
-      resolve(data)
     } catch (e) {
       console.log(e)
-      resolve(data)
+      reject(data)
     }
   })
 }

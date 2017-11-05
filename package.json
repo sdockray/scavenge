@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/sdockray/scavenge#readme",
   "dependencies": {
+    "a-promise-queue": "^1.0.1",
     "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
     "osmosis": "^1.1.4",

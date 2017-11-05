@@ -1,7 +1,8 @@
 var _ = require('lodash')
 var osmosis = require('osmosis')
+var PromiseQueue = require('a-promise-queue')
+var queue = new PromiseQueue()
 
-//
 function whatsHere (o, conf) {
   if (conf.find) {
     o = o.find(conf.find)
@@ -71,11 +72,11 @@ function go (instructions) {
       var o = osmosis.get(transformedInstructions.origin)
       o = whatsHere(o, transformedInstructions)
       o.then((context, data, next, done) => {
-        execute(_.clone(data), plugins, 'onData')
+        queue.add(() => execute(_.clone(data), plugins, 'onData')
           .then((results) => {
             console.log('getting some where!')
           })
-          .then(done)
+        )
       })
       .done(() => {
         execute(null, plugins, 'onEnd')

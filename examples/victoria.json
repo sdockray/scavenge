@@ -27,7 +27,8 @@
     },
     "download": {
       "url": "https://www.parliament.vic.gov.au/${pdf}",
-      "directory": "${year}"
+      "directory": "Victoria Legislative Council/${year}",
+      "overwrite": false
     }
   }
 }

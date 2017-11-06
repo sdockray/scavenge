@@ -1,6 +1,6 @@
 {
   "name": "scavenge",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Configurable scraping of a website into an other configurable output",
   "main": "index.js",
   "scripts": {

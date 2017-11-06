@@ -104,7 +104,7 @@ function goJsonFile (name) {
 }
 
 // Testing entry point
-goJsonFile('./examples/oz.json')
+goJsonFile('./examples/victoria.json')
 
 // var download = require('./plugins/download')
 // download.onData(

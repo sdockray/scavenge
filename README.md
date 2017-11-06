@@ -1,4 +1,26 @@
-# Scrape To Library
+# Scavenge
+
+## Install
+
+```
+npm install -g scavenge
+```
+
+## Usage
+
+Scavenge can be used as a module or as command line program
+
+```
+scavenge ./path/to/json/configuration.json
+```
+
+or see [an example](./example.js)
+
+## Editing configuration files
+
+In both cases, you'll need to create a JSON configuration file to define the scraping job and the actions to take with the data. This documentation is coming, but for now just look at [some examples](./examples) 
+
+## Design Thoughts
 
 This is a tool for making archives from (well-defined sections of) websites.
 

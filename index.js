@@ -74,7 +74,7 @@ function go (instructions) {
       o.then((context, data, next, done) => {
         queue.add(() => execute(_.clone(data), plugins, 'onData')
           .then((results) => {
-            console.log('getting some where!')
+            console.log(results)
           })
           .then(done)
         )

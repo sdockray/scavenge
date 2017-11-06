@@ -1,6 +1,6 @@
 {
   "origin": "http://ro.uow.edu.au/ozsydney/",
-  "find": "ul#gallery_items li:nth-child(3) .content_block",
+  "find": "ul#gallery_items li:nth-child(1) .content_block",
   "variables": {
     "title": "h2 > a",
     "date": "#mag_pubdate",
@@ -23,6 +23,10 @@
         "source": "${info}",
         "path": "OZ/${title} (${date})/"
       }
+    },
+    "readability": {
+      "url": "${info}",
+      "filepath": "OZ/${title} (${date})/index.html"
     },
     "mock": [
       {

@@ -23,8 +23,11 @@
   "homepage": "https://github.com/sdockray/scavenge#readme",
   "dependencies": {
     "a-promise-queue": "^1.0.1",
+    "create-html": "^4.0.0",
+    "github-markdown-css": "^2.9.0",
     "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
+    "node-readability": "^3.0.0",
     "osmosis": "^1.1.4",
     "request": "^2.83.0",
     "sqlite3": "^3.1.13"

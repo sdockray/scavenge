@@ -20,13 +20,13 @@ function download (data, config) {
           setTimeout(() => {
             console.log('downloaded', url, filepath);
             resolve(data)
-          }, 5000)
+          }, 500)
         } else if (dir) {
           console.log('downloading', url, dir);
           setTimeout(() => {
             console.log('downloaded', url, dir);
             resolve(data)
-          }, 5000)
+          }, 500)
         }
       } else {
         resolve(data)

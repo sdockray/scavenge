@@ -45,7 +45,7 @@ function download (data, config) {
               fs.writeFile(filepath, output, function(err) {
                   if (err) throw err
                   resolve(data)
-              }); 
+              })
             })
           })
         }

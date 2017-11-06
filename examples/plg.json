@@ -1,0 +1,16 @@
+{
+  "origin": "http://www.progressivelibrariansguild.org/PL_Jnl/jnl_contents.shtml",
+  "find": "div.content p:not([class]) a",
+  "next": {
+    "follow": "@href",
+    "find": "div.content",
+    "variables": {
+      "issue": "p.pagename",
+      "edition": "p.subpagename",
+      "title": ["a !> p:not([class])"],
+      "pdf": ["p:not([class]) a@href"]
+    }
+  },
+  "actions": {
+  }
+}

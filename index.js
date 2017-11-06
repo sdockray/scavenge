@@ -79,6 +79,7 @@ function go (instructions) {
         )
       })
       .done(() => {
+        console.log('NEARLY DONE')
         execute(null, plugins, 'onEnd')
           .then(() => {
             console.log('DONE!')
@@ -104,7 +105,7 @@ function goJsonFile (name) {
 }
 
 // Testing entry point
-goJsonFile('./examples/victoria.json')
+goJsonFile('./examples/oz.json')
 
 // var download = require('./plugins/download')
 // download.onData(

@@ -15,7 +15,16 @@
     }
   },
   "actions": {
-    "download": [
+    "jsonManifest": {
+      "filepath": "OZ/manifest.json",
+      "properties": {
+        "title": "${title}", 
+        "date": "${date}", 
+        "source": "${info}",
+        "path": "OZ/${title} (${date})/"
+      }
+    },
+    "mock": [
       {
         "url": "${pdf}",
         "filepath": "OZ/${title} (${date})/${title}.pdf",

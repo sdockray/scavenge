@@ -16,7 +16,7 @@ function whatsHere (o, conf) {
     o = o.set(conf.variables)
   }
   // Filters data object by one of its properties and a regular expression
-  if (conf.filter && conf.filter.variable && conf.filter.regexp) {
+  if (conf.filter) {
     o = o.then(function (context, data, next, done) {
       const filter = _.keys(conf.filter).every(key => data[key] && data[key].match(new RegExp(conf.filter[key])))
       if (filter) {

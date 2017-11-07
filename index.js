@@ -18,11 +18,13 @@ function whatsHere (o, conf) {
   // Filters data object by one of its properties and a regular expression
   if (conf.filter && conf.filter.variable && conf.filter.regexp) {
     o = o.then(function (context, data, next, done) {
-      if (data[conf.filter.variable].match(new RegExp(conf.filter.regexp))) {
+      const filter = _.keys(conf.filter).every(key => data[key] && data[key].match(new RegExp(conf.filter[key])))
+      if (filter) {
         next(context, data)
+      } else {
+        // The final done() is never called unless I include this, but I'm not 100% sure.
+        done()
       }
-      // The final done() is never called unless I include this, but I'm not 100% sure.
-      done()
     })
   }
   // Next usually defines a link to follow and more to do recursively

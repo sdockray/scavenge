@@ -18,20 +18,21 @@ or see [an example](./example.js)
 
 ## Editing configuration files
 
-In both cases, you'll need to create a JSON configuration file to define the scraping job and the actions to take with the data. This documentation is coming, but for now just look at [some examples](./examples) 
+In both cases, you'll need to create a JSON configuration file to define the scraping job and the actions to take with the data. This documentation is coming, but for now just look at [some examples](./examples)
 
 ```
 {
-  "origin": URL, # the entry point url of the scraper 
+  "origin": URL, # the entry point url of the scraper
   "find": selector, # what elements do you want to find?
   "set": variable name, # save the value of the found element innerHTML to a variable
   "variables": { # save multiple variables. relative to the found element
     variable name: selector,
-    ... 
-  }, 
+    ...
+  },
   "filter": { # filters the data object by one of its properties
-    "variable": variable name, # one of the variables defined above
-    "regexp": string # a regular expression. If the variable doesn't match the regex that element is tossed
+    [variable]: "regexp"
+    # variable name, one of the variables defined above, it cannot be an array
+    # a regular expression. If the variable doesn't match the regex that element is tossed
   },
   "next": { # there is a recursive operation starting... next implies a link is about to be followed
     "follow": selector, # the url of the link
@@ -97,7 +98,7 @@ OZ
 4. The `next` link would be `$('h2 a').attr('href')`
 5. In the next page, it would find cover and download url, maybe this time by matching on pattern.
 
-It may have been, however, that there was no metadata on the start page and so the issue title and date were only fetched on the second page. Perhaps the thumbnail was on the first page but not the detail page. At any rate, since the variables might not be known until getting all the way down, this script doesn't create the directories and do the downloading until after it has crawled down as far as it needs to. It will build a JSON array to describe the directory names, the file names, and the download URLs. 
+It may have been, however, that there was no metadata on the start page and so the issue title and date were only fetched on the second page. Perhaps the thumbnail was on the first page but not the detail page. At any rate, since the variables might not be known until getting all the way down, this script doesn't create the directories and do the downloading until after it has crawled down as far as it needs to. It will build a JSON array to describe the directory names, the file names, and the download URLs.
 
 ```
 {
@@ -150,7 +151,7 @@ files: [
     },
   ],
   "variables": [
-    
+
   ]
 }
 ```

@@ -5,8 +5,7 @@
     "issueHref": "@href"
   },
   "filter": {
-    "variable": "issueHref",
-    "regexp": "Issue\\d+.html"
+    "issueHref": "Issue\\d+.html"
   },
   "next": {
     "follow": "@href",
@@ -17,8 +16,7 @@
       "articleAuthor": "+ span"
     },
     "filter": {
-      "variable": "pdf",
-      "regexp": ".*.pdf"
+      "pdf": ".*.pdf"
     }
   },
   "actions": {
@@ -39,8 +37,8 @@
     "jsonManifest": {
       "filepath": "Alphaville/manifest.json",
       "properties": {
-        "title": "${articleTitle}", 
-        "author": "${articleAuthor}", 
+        "title": "${articleTitle}",
+        "author": "${articleAuthor}",
         "source": "http://alphavillejournal.com/${pdf}",
         "issue": "${issue}"
       }

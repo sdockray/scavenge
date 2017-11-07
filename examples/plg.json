@@ -26,6 +26,9 @@
           "title": "$1"
         }
       }]
+    },
+    "opf": {
+      "directory": "./Progressive Librarians/${issue}/"
     }
   }
 }

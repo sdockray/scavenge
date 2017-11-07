@@ -7,10 +7,25 @@
     "variables": {
       "issue": "p.pagename",
       "edition": "p.subpagename",
-      "title": ["a !> p:not([class])"],
+      "title_raw": ["a !> p:not([class])"],
       "pdf": ["p:not([class]) a@href"]
     }
   },
   "actions": {
+    "translate": {
+      "title_raw": [
+      {
+        "match": "\\n(?:[\\s\\S]*by\\s([\\s\\S]+), )?page (\\d+) \\[\\.pdf file\\]",
+        "to": {
+          "author": "$1",
+          "page": "$2"
+        }
+      }, {
+        "match": "^([\\s\\S]+)\\n",
+        "to": {
+          "title": "$1"
+        }
+      }]
+    }
   }
 }

@@ -20,6 +20,28 @@ or see [an example](./example.js)
 
 In both cases, you'll need to create a JSON configuration file to define the scraping job and the actions to take with the data. This documentation is coming, but for now just look at [some examples](./examples) 
 
+```
+{
+  "origin": URL, # the entry point url of the scraper 
+  "find": selector, # what elements do you want to find?
+  "set": variable name, # save the value of the found element innerHTML to a variable
+  "variables": { # save multiple variables. relative to the found element
+    variable name: selector,
+    ... 
+  }, 
+  "filter": { # filters the data object by one of its properties
+    "variable": variable name, # one of the variables defined above
+    "regexp": string # a regular expression. If the variable doesn't match the regex that element is tossed
+  },
+  "next": { # there is a recursive operation starting... next implies a link is about to be followed
+    "follow": selector, # the url of the link
+    ...
+    find, set, variables, filter, and next are all allowed here
+    ...
+  }
+}
+```
+
 ## Design Thoughts
 
 This is a tool for making archives from (well-defined sections of) websites.

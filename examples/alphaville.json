@@ -1,0 +1,56 @@
+{
+  "origin": "http://alphavillejournal.com",
+  "find": "a",
+  "variables": {
+    "issueHref": "@href"
+  },
+  "filter": {
+    "variable": "issueHref",
+    "regexp": "Issue\\d+.html"
+  },
+  "next": {
+    "follow": "@href",
+    "find": ".IssueContents a",
+    "set": "articleTitle",
+    "variables": {
+      "pdf": "@href",
+      "articleAuthor": "+ span"
+    },
+    "filter": {
+      "variable": "pdf",
+      "regexp": ".*.pdf"
+    }
+  },
+  "actions": {
+    "translate": {
+      "issueHref": [{
+        "match": "Issue(\\d+).html",
+        "to": {
+          "issue": "$1"
+        }
+      }],
+      "pdf": [{
+        "match": "\\/(.*.pdf)",
+        "to": {
+          "filename": "$1"
+        }
+      }]
+    },
+    "jsonManifest": {
+      "filepath": "Alphaville/manifest.json",
+      "properties": {
+        "title": "${articleTitle}", 
+        "author": "${articleAuthor}", 
+        "source": "http://alphavillejournal.com/${pdf}",
+        "issue": "${issue}"
+      }
+    },
+    "download": [
+      {
+        "url": "http://alphavillejournal.com/${pdf}",
+        "filepath": "Alphaville/${issue}/${filename}",
+        "overwrite": false
+      }
+    ]
+  }
+}

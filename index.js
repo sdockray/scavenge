@@ -7,9 +7,25 @@ function whatsHere (o, conf) {
   if (conf.find) {
     o = o.find(conf.find)
   }
+  // Sets current find value to the variable name
+  if (conf.set) {
+    o = o.set(conf.set)
+  }
+  // Sets a group of variables
   if (conf.variables) {
     o = o.set(conf.variables)
   }
+  // Filters data object by one of its properties and a regular expression
+  if (conf.filter && conf.filter.variable && conf.filter.regexp) {
+    o = o.then(function (context, data, next, done) {
+      if (data[conf.filter.variable].match(new RegExp(conf.filter.regexp))) {
+        next(context, data)
+      }
+      // The final done() is never called unless I include this, but I'm not 100% sure.
+      done()
+    })
+  }
+  // Next usually defines a link to follow and more to do recursively
   if (conf.next) {
     if (conf.next.follow) {
       o = o.follow(conf.next.follow)

@@ -52,6 +52,7 @@ function writeManifest() {
     try {
       if (manifestPath) {
         if (!overwrite && fs.existsSync(manifestPath)) {
+          console.log('Skipping manifest because it already exists')
           resolve(true)
         } else {
           console.log('Writing manifest to:', manifestPath)

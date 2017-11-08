@@ -28,6 +28,11 @@
           "title": "$1"
         }
       }]
+    },
+    "download": {
+      "url": "pdf",
+      "directory": "Progressive Librarians Guild/${author}/${title}/",
+      "overwrite": false
     }
   }
 }

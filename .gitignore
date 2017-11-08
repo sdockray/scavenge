@@ -7,4 +7,5 @@ node_modules/
 .dat
 OZ/
 Alphaville/
+libcom/
 data.sqlite

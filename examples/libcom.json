@@ -1,0 +1,62 @@
+{
+  "origin": "https://libcom.org/library/authors/index",
+  "find": ".view-tags-alpha.view-display-id-attachment span.views-summary:nth-child(10) a",
+  "set": "letter",
+  "variables": {
+    "letterUrl": "@href"
+  },
+  "next": {
+    "follow": "@href",
+    "find": "#main-content .view-content table a:first",
+    "set": "author",
+    "variables": {
+      "authorUrl": "@href"
+    },
+    "next": {
+      "follow": "@href",
+      "find": "#main-content .view-content .views-row:first",
+      "variables": {
+        "titleUrl": "a@href",
+        "summary": ".field-field-introduction"
+      },
+      "next": {
+        "follow": "a@href",
+        "find": "#page",
+        "variables": {
+          "title": "h1.title",
+          "photo": "#node-page .field-field-photo img@src",
+          "tags": "#node-sidebar .taxonomy:first ul",
+          "files": ["#attachments tbody tr td a@href"]
+        }
+      }
+    }
+  },
+  "actions": {
+    "jsonManifest": {
+      "filepath": "libcom/manifest.json",
+      "properties": {
+        "title": "${title}", 
+        "author": "${author}", 
+        "source": "https://libcom.org${titleUrl}",
+        "path": "libcom/${author}/${title}/index.html"
+      }
+    },
+    "readability": {
+      "url": "https://libcom.org${titleUrl}",
+      "filepath": "libcom/${author}/${title}/index.html",
+      "overwrite": false
+    },
+    "download": [
+      {
+        "url": "https://libcom.org${photo}",
+        "filepath": "libcom/${author}/${title}/cover.jpg",
+        "overwrite": false
+      },
+      {
+        "url": "files",
+        "directory": "libcom/${author}/${title}/",
+        "overwrite": false
+      }
+    ]
+  }
+}

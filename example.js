@@ -16,7 +16,7 @@ function scavengeJsonFile (name) {
 }
 
 // Testing entry point
-scavengeJsonFile('./examples/alphaville.json')
+scavengeJsonFile('./examples/libcom.json')
 
 // var download = require('./plugins/download')
 // download.onData(

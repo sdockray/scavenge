@@ -7,7 +7,7 @@ var utils = require('../utils')
 var tpl = utils.tpl
 
 /*
-  url: required
+  url: required. Can also be an array of urls.
   filepath: specify a complete path to a file
   directory: specify a directory for the downloaded file
  */
@@ -15,7 +15,9 @@ var tpl = utils.tpl
 function download (data, config) {
   return new Promise((resolve, reject) => {
     try {
-      if (config.url) {
+      if (config.url && _.has(data, config.url) && _.isArray(data[config.url])) {
+        return data[config.url].reduce((p, url) => p.then(d => download(data, _.assign(config, { url }))), Promise.resolve(data))
+      } else if (config.url) {
         var url = tpl(config.url, data)
         var filepath = (config.filepath) ? tpl(config.filepath, data) : undefined
         var dir = (config.directory) ? tpl(config.directory, data) : undefined

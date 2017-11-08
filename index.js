@@ -86,7 +86,7 @@ function go (instructions) {
   // start actions
   execute(instructions, plugins, 'onStart')
     .then((transformedInstructions) => {
-      console.log(transformedInstructions)
+      // console.log(transformedInstructions)
       var o = osmosis.get(transformedInstructions.origin)
       o = whatsHere(o, transformedInstructions)
       o.then((context, data, next, done) => {

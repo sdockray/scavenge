@@ -16,16 +16,16 @@
       "follow": "@href",
       "find": "#main-content .view-content .views-row:first",
       "variables": {
-        "titleUrl": "a@href",
+        "titleUrl": "h2 a@href",
         "summary": ".field-field-introduction"
       },
       "next": {
-        "follow": "a@href",
+        "follow": "h2 a@href",
         "find": "#page",
         "variables": {
           "title": "h1.title",
           "photo": "#node-page .field-field-photo img@src",
-          "tags": "#node-sidebar .taxonomy:first ul",
+          "tags": ["#node-sidebar .taxonomy:first ul a"],
           "files": ["#attachments tbody tr td a@href"]
         }
       }
@@ -38,6 +38,8 @@
         "title": "${title}", 
         "author": "${author}", 
         "source": "https://libcom.org${titleUrl}",
+        "tags": "tags",
+        "files": "files",
         "path": "libcom/${author}/${title}/index.html"
       }
     },

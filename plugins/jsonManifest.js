@@ -36,7 +36,11 @@ function addData (data, options) {
     try {
       var properties = options.properties
       var finalized = _.mapValues(properties, function(v) {
-        return tpl(v, data)
+        if (_.has(data, v) && _.isArray(data[v])) {
+          return data[v]
+        } else {
+          return tpl(v, data)
+        }
       })
       manifest.data.push(finalized)
       resolve(data)
@@ -58,7 +62,7 @@ function writeManifest() {
           console.log('Writing manifest to:', manifestPath)
           mkdirp(path.dirname(manifestPath), function (err) {
             if (err) throw err
-            fs.writeFile(manifestPath, JSON.stringify(manifest), function(err) {
+            fs.writeFile(manifestPath, JSON.stringify(manifest, null, " "), function(err) {
               if (err) throw err
               resolve(true)
             }) 

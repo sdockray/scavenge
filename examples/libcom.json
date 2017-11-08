@@ -43,8 +43,8 @@
     "jsonManifest": {
       "filepath": "libcom/manifest.json",
       "properties": {
-        "title": "${title}", 
-        "author": "${author}", 
+        "title": "${title}",
+        "author": "${author}",
         "source": "https://libcom.org${titleUrl}",
         "tags": "tags",
         "files": "files",

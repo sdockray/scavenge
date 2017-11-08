@@ -14,13 +14,13 @@ var tpl = utils.tpl
  */
 
 function download (data, config) {
+  if (config.url && _.has(data, config.url) && _.isArray(data[config.url])) {
+    return data[config.url].reduce((p, url) => p.then(d => download(data, _.assign(config, { url }))), Promise.resolve(data))
+  }
   return new Promise((resolve, reject) => {
     try {
-      // Handle array of urls
-      if (config.url && _.has(data, config.url) && _.isArray(data[config.url])) {
-        return data[config.url].reduce((p, url) => p.then(d => download(data, _.assign(config, { url }))), Promise.resolve(data))
-      // Handle data property names and strings
-      } else if (config.url) {
+      if (config.url) {
+        console.log('HANDING SINGLE URL')
         // In case this is an object
         if (_.has(data, config.url)) {
           config.url = data[config.url]
@@ -47,20 +47,17 @@ function download (data, config) {
             }
           } else if (dir) {
             mkdirp(dir, function (err) {
-              if (err) throw err
+              if (err) return reject(err)
               var filename = path.basename(url)
               filepath = path.join(dir, filename)
-              if (!overwrite && fs.existsSync(filepath)) {
-                resolve(data)
-              } else {
+              if (!overwrite && fs.existsSync(filepath)) return resolve(data)
                 // Stream downloaded file into filesystem
-                console.log('Downloading', url, 'to', filepath)
-                var req = request(url)
-                var file = fs.createWriteStream(filepath)
-                req.pipe(file)
-                file.on('error', reject)
-                file.on('close', () => resolve(data))
-              }
+              console.log('DIR Downloading', url, 'to', filepath)
+              var req = request(url)
+              var file = fs.createWriteStream(filepath)
+              req.pipe(file)
+              file.on('error', reject)
+              file.on('close', () => resolve(data))
             })
           }
         } else {
@@ -68,6 +65,7 @@ function download (data, config) {
           resolve(data)
         }
       } else {
+        // Not a valid url
         resolve(data)
       }
     } catch (e) {

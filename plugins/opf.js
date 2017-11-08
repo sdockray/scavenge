@@ -8,9 +8,10 @@ var tpl = utils.tpl
 function makeOpf (data, config) {
   return new Promise((resolve, reject) => {
     const dir = tpl(config.directory, data)
+    const file = config.filename ? tpl(config.filename, data) : 'metadata.opf'
     const opf = new OPF()
     opf.title = data.title
-    const filepath = path.join(dir, config.filename || 'metadata.opf')
+    const filepath = path.join(dir, file )
     mkdirp(config.directory, (err) => {
       if (err) return reject(err)
       fs.writeFile(filepath, opf.toXML(), (e) => {

@@ -1,6 +1,6 @@
 {
   "origin": "https://libcom.org/library/authors/index",
-  "find": ".view-tags-alpha.view-display-id-attachment span.views-summary:nth-child(1) a",
+  "find": ".view-tags-alpha.view-display-id-attachment span.views-summary:nth-child(35) a",
   "set": "letter",
   "variables": {
     "letterUrl": "@href"
@@ -14,11 +14,12 @@
     },
     "next": {
       "follow": "@href",
-      "find": "#main-content .view-content .views-row:first",
+      "find": "#main-content .view-content .views-row",
       "variables": {
         "titleUrl": "h2 a@href",
         "summary": ".field-field-introduction"
       },
+      "paginate": "#main-content ul.pager li.pager-next a",
       "next": {
         "follow": "h2 a@href",
         "find": "#page",
@@ -60,11 +61,6 @@
       {
         "url": "photo",
         "filepath": "libcom/${author}/${title}/cover.jpg",
-        "overwrite": false
-      },
-      {
-        "url": "files",
-        "directory": "libcom/${author}/${title}/",
         "overwrite": false
       }
     ]

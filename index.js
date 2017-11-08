@@ -15,6 +15,10 @@ function whatsHere (o, conf) {
   if (conf.variables) {
     o = o.set(conf.variables)
   }
+  // Pagination
+  if (conf.paginate) {
+    o = o.paginate(conf.paginate)
+  }
   // Filters data object by one of its properties and a regular expression
   if (conf.filter) {
     o = o.then(function (context, data, next, done) {

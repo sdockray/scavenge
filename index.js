@@ -104,13 +104,11 @@ function go (instructions) {
             console.log('DONE!')
           })
       })
+      // .log(console.log)
+      .error(console.log)
+      // .debug(console.log)
     })
     .catch(e => console.log('eeerrr', e))
-  /*
-  o.log(console.log)
-  .error(console.log)
-  .debug(console.log);
-  */
 }
 
 module.exports = go

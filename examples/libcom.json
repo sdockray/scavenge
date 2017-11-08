@@ -1,13 +1,13 @@
 {
   "origin": "https://libcom.org/library/authors/index",
-  "find": ".view-tags-alpha.view-display-id-attachment span.views-summary:nth-child(10) a",
+  "find": ".view-tags-alpha.view-display-id-attachment span.views-summary:nth-child(1) a",
   "set": "letter",
   "variables": {
     "letterUrl": "@href"
   },
   "next": {
     "follow": "@href",
-    "find": "#main-content .view-content table a:first",
+    "find": "#main-content .view-content table a",
     "set": "author",
     "variables": {
       "authorUrl": "@href"
@@ -24,7 +24,7 @@
         "find": "#page",
         "variables": {
           "title": "h1.title",
-          "photo": "#node-page .field-field-photo img@src",
+          "photoHref": "#node-page .field-field-photo img@src",
           "tags": ["#node-sidebar .taxonomy:first ul a"],
           "files": ["#attachments tbody tr td a@href"]
         }
@@ -32,6 +32,14 @@
     }
   },
   "actions": {
+    "translate": {
+      "photoHref": [{
+        "match": "\\/(.*)",
+        "to": {
+          "photo": "https://libcom.org/$1"
+        }
+      }]
+    },
     "jsonManifest": {
       "filepath": "libcom/manifest.json",
       "properties": {
@@ -50,7 +58,7 @@
     },
     "download": [
       {
-        "url": "https://libcom.org${photo}",
+        "url": "photo",
         "filepath": "libcom/${author}/${title}/cover.jpg",
         "overwrite": false
       },

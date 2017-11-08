@@ -6,7 +6,7 @@ var scavenge = require('.')
 console.log('Preparing to scavenge...')
 
 cli
-  .version('1.2.0')
+  .version('1.3.0')
   .usage('<configuration>')
   .description('Scrape a website according to JSON configuration and execute some actions with the data')
   .option('-u, --username <username>', 'Username to use in case of login')

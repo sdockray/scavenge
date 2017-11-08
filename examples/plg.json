@@ -3,12 +3,14 @@
   "find": "div.content p:not([class]) a",
   "next": {
     "follow": "@href",
-    "find": "div.content",
+    "find": "p",
     "variables": {
-      "issue": "p.pagename",
-      "edition": "p.subpagename",
-      "title_raw": ["a !> p:not([class])"],
-      "pdf": ["p:not([class]) a@href"]
+      "section": "a !> p !~ p strong:last",
+      "title_raw": "a !> p",
+      "pdf": "a@href"
+    },
+    "filter": {
+      "pdf": ".pdf"
     }
   },
   "actions": {
@@ -26,9 +28,6 @@
           "title": "$1"
         }
       }]
-    },
-    "opf": {
-      "directory": "./Progressive Librarians/${issue}/"
     }
   }
 }

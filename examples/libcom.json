@@ -19,7 +19,7 @@
         "titleUrl": "h2 a@href",
         "summary": ".field-field-introduction"
       },
-      "paginate": "#main-content ul.pager li.pager-next a",
+      "paginate": "#main-content ul.pager li.pager-next a",      
       "next": {
         "follow": "h2 a@href",
         "find": "#page",
@@ -61,6 +61,11 @@
       {
         "url": "photo",
         "filepath": "libcom/${author}/${title}/cover.jpg",
+        "overwrite": false
+      },
+      {
+        "url": "files",
+        "directory": "libcom/${author}/${title}/",
         "overwrite": false
       }
     ]

@@ -8,4 +8,5 @@ node_modules/
 OZ/
 Alphaville/
 libcom/
+test.json
 data.sqlite

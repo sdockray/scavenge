@@ -82,10 +82,17 @@ function execute (data, plugins, event) {
   )
 }
 
-// Instructions are a JSON object describing the scavenge task
-function go (instructions) {
-  // require action plugins
-  const plugins = _.mapValues(instructions.actions, resolvePlugin)
+function queueActions (data, plugins, done) {
+  queue.add(() => execute(_.clone(data), plugins, 'onData')
+    .then((results) => {
+      console.log(results)
+    })
+    // .then(done)
+  )
+}
+
+// Stage 1: scrape the data
+function goScrape (instructions, plugins) {
   console.log('Starting to scavenge:', instructions.origin)
   // start actions
   execute(instructions, plugins, 'onStart')
@@ -94,12 +101,7 @@ function go (instructions) {
       var o = osmosis.get(transformedInstructions.origin)
       o = whatsHere(o, transformedInstructions)
       o.then((context, data, next, done) => {
-        queue.add(() => execute(_.clone(data), plugins, 'onData')
-          .then((results) => {
-            console.log(results)
-          })
-          .then(done)
-        )
+        queueActions(data, plugins, done)
       })
       .done(() => {
         console.log('NEARLY DONE')
@@ -113,6 +115,32 @@ function go (instructions) {
       // .debug(console.log)
     })
     .catch(e => console.log('eeerrr', e))
+}
+
+// Stage 2: run actions with every piece of data
+function goActions (instructions, plugins, data) {
+  console.log('Running actions from data. Length:', data.length)
+  execute(instructions, plugins, 'onStart')
+    .then(() => {
+      _.each(data, d => queueActions(d, plugins))
+      queue.add(() => execute(null, plugins, 'onEnd')
+        .then(() => {
+          console.log('DONE!')
+        })
+      )
+    })
+    .catch(e => console.log('eeerrr', e))
+}
+
+// Instructions are a JSON object describing the scavenge task
+function go (instructions, data) {
+  // require action plugins
+  const plugins = _.mapValues(instructions.actions, resolvePlugin)
+  if (data) {
+    goActions(instructions, plugins, data)
+  } else {
+    goScrape(instructions, plugins)
+  }
 }
 
 module.exports = go

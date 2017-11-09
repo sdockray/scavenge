@@ -24,11 +24,11 @@
         "path": "OZ/${title} (${date})/"
       }
     },
-    "readability": {
+    "readabilityX": {
       "url": "${info}",
       "filepath": "OZ/${title} (${date})/index.html"
     },
-    "download": [
+    "downloadX": [
       {
         "url": "${pdf}",
         "filepath": "OZ/${title} (${date})/${title}.pdf",

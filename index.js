@@ -87,7 +87,7 @@ function queueActions (data, plugins, done) {
     .then((results) => {
       console.log(results)
     })
-    // .then(done)
+    .then(done)
   )
 }
 

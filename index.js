@@ -3,6 +3,8 @@ var osmosis = require('osmosis')
 var PromiseQueue = require('a-promise-queue')
 var queue = new PromiseQueue()
 
+var delayBetweenPages // 1 second delay before following next link. Can override in JSON with 'delay'
+
 function whatsHere (o, conf) {
   if (conf.find) {
     o = o.find(conf.find)
@@ -34,7 +36,7 @@ function whatsHere (o, conf) {
   // Next usually defines a link to follow and more to do recursively
   if (conf.next) {
     if (conf.next.follow) {
-      o = o.follow(conf.next.follow)
+      o = o.delay(delayBetweenPages).follow(conf.next.follow)
     }
     o = whatsHere(o, conf.next)
   }
@@ -93,7 +95,12 @@ function queueActions (data, plugins, done) {
 
 // Stage 1: scrape the data
 function goScrape (instructions, plugins) {
+  delayBetweenPages = 1000
+  if (instructions.delay && !isNaN(instructions.delay)) {
+    delayBetweenPages = parseInt(instructions.delay)
+  }
   console.log('Starting to scavenge:', instructions.origin)
+  console.log('Pause between requests:', delayBetweenPages, 'milliseconds')
   // start actions
   execute(instructions, plugins, 'onStart')
     .then((transformedInstructions) => {

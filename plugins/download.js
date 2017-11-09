@@ -15,7 +15,7 @@ var tpl = utils.tpl
 
 function download (data, config) {
   if (config.url && _.has(data, config.url) && _.isArray(data[config.url])) {
-    return data[config.url].reduce((p, url) => p.then(d => download(data, _.assign(config, { url }))), Promise.resolve(data))
+    return data[config.url].reduce((p, url) => p.then(d => download(data, _.assign({}, config, { url }))), Promise.resolve(data))
   }
   return new Promise((resolve, reject) => {
     try {

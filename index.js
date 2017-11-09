@@ -107,9 +107,10 @@ function goScrape (instructions, plugins) {
       // console.log(transformedInstructions)
       var o = osmosis.get(transformedInstructions.origin)
       o = whatsHere(o, transformedInstructions)
-      o.then((context, data, next, done) => {
-        queueActions(data, plugins, done)
-      })
+      o.then((context, data, next, done) =>
+        execute(_.clone(data), plugins, 'onData')
+        // .then((results) => console.log)
+        .then(done))
       .done(() => {
         console.log('NEARLY DONE')
         execute(null, plugins, 'onEnd')

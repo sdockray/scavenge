@@ -27,6 +27,7 @@ function download (data, config) {
         var filepath = (config.filepath) ? tpl(config.filepath, data) : path.join(dir, 'index.html')
         var overwrite = !(_.has(config, 'overwrite') && config.overwrite === false)
         if (!overwrite && fs.existsSync(filepath)) {
+          console.log('Skipping readability (already exists):', filepath)
           resolve(data)
         } else {
           mkdirp(path.dirname(filepath), function (err) {
@@ -42,9 +43,9 @@ function download (data, config) {
                   .replace('{{TITLE}}', page.title)
               })
               page.close()
-              fs.writeFile(filepath, output, function(err) {
-                  if (err) throw err
-                  resolve(data)
+              fs.writeFile(filepath, output, function (err) {
+                if (err) throw err
+                resolve(data)
               })
             })
           })

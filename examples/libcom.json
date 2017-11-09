@@ -1,7 +1,7 @@
 {
   "origin": "https://libcom.org/library/authors/index",
   "delay": 1000,
-  "find": ".view-tags-alpha.view-display-id-attachment span.views-summary:nth-child(1) a",
+  "find": ".view-tags-alpha.view-display-id-attachment span.views-summary:nth-child(35) a",
   "set": "letter",
   "variables": {
     "letterUrl": "@href"

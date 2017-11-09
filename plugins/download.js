@@ -13,6 +13,13 @@ var tpl = utils.tpl
   directory: specify a directory for the downloaded file
  */
 
+var counter
+
+function init (instructions, options) {
+  counter = 0
+  return instructions
+}
+
 function download (data, config) {
   if (config.url && _.has(data, config.url) && _.isArray(data[config.url])) {
     return data[config.url].reduce((p, url) => p.then(d => download(data, _.assign(config, { url }))), Promise.resolve(data))
@@ -26,24 +33,30 @@ function download (data, config) {
         if (_.has(data, url)) {
           url = data[url]
         }
-        var url = tpl(url, data)
+        url = tpl(url, data)
         var filepath = (config.filepath) ? tpl(config.filepath, data) : undefined
         var dir = (config.directory) ? tpl(config.directory, data) : undefined
         var overwrite = !(_.has(config, 'overwrite') && config.overwrite === false)
         if (validUrl.isUri(url)) {
           if (filepath) {
             if (!overwrite && fs.existsSync(filepath)) {
+              console.log('Skipping download (already exists):', filepath)
               resolve(data)
             } else {
               mkdirp(path.dirname(filepath), function (err) {
                 if (err) throw err
                 // Stream downloaded file into filesystem
-                console.log('Downloading', url, 'to', filepath, data)
+                console.log(counter, 'Downloading', url, 'to', filepath, data)
+                counter++
                 var req = request(url)
                 var file = fs.createWriteStream(filepath)
                 req.pipe(file)
                 file.on('error', reject)
-                file.on('close', () => resolve(data))
+                file.on('close', () => {
+                  counter--
+                  console.log(counter, 'files still downloading')
+                  resolve(data)
+                })
               })
             }
           } else if (dir) {
@@ -53,12 +66,17 @@ function download (data, config) {
               filepath = path.join(dir, filename)
               if (!overwrite && fs.existsSync(filepath)) return resolve(data)
                 // Stream downloaded file into filesystem
-              console.log('DIR Downloading', url, 'to', filepath)
+              console.log(counter, 'DIR Downloading', url, 'to', filepath)
+              counter++
               var req = request(url)
               var file = fs.createWriteStream(filepath)
               req.pipe(file)
               file.on('error', reject)
-              file.on('close', () => resolve(data))
+              file.on('close', () => {
+                counter--
+                console.log(counter, 'files still downloading')
+                resolve(data)
+              })
             })
           }
         } else {
@@ -77,7 +95,7 @@ function download (data, config) {
 }
 
 module.exports = {
-  onStart: a => a,
+  onStart: init,
   onData: download,
   onEnd: a => a
 }

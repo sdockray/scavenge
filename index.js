@@ -1,7 +1,8 @@
 var _ = require('lodash')
 var osmosis = require('osmosis')
 var PromiseQueue = require('a-promise-queue')
-var queue = new PromiseQueue()
+
+var queue = new PromiseQueue(null, 10)
 
 var delayBetweenPages // 1 second delay before following next link. Can override in JSON with 'delay'
 

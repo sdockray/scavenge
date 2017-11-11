@@ -31,13 +31,21 @@ function translate (data, config) {
     const toTranslate = data[variable]
     // if it is a string, iterate over each and make new
     if (toTranslate && typeof toTranslate === 'string') {
-      optionList.forEach((options) => {
-        data[variable] = translateVariable(data, toTranslate, options)
-      })
+      if (Array.isArray(optionList)) {
+        optionList.forEach((options) => {
+          data[variable] = translateVariable(data, toTranslate, options)
+        })
+      } else {
+        data[variable] = translateVariable(data, toTranslate, optionList)
+      }
     } else if (toTranslate && Array.isArray(toTranslate)) {
-      optionList.forEach((options) => {
-        data[variable] = toTranslate.map(value => translateVariable(data, value, options))
-      })
+      if (Array.isArray(optionList)) {
+        optionList.forEach((options) => {
+          data[variable] = toTranslate.map(value => translateVariable(data, value, options))
+        })
+      } else {
+        data[variable] = toTranslate.map(value => translateVariable(data, value, optionList))
+      }
     } else {
       console.log('warning', variable, 'is was not found and cannot be translated')
     }

@@ -5,6 +5,7 @@ var fs = require('fs')
 
 var utils = require('../lib/utils')
 var tpl = utils.tpl
+var tryToRequire = utils.tryToRequire
 
 /*
   Config options
@@ -17,13 +18,24 @@ var tpl = utils.tpl
 var manifest
 var manifestPath
 var overwrite = true
+var append = false
 
 function start (instructions, options) {
   return new Promise((resolve, reject) => {
     try {
       manifestPath = (options.filepath) ? options.filepath : undefined
       overwrite = !(_.has(options, 'overwrite') && options.overwrite === false)
-      manifest = { data: [] }
+      append = (_.has(options, 'append') && options.append === true)
+      if (append) {
+        console.log('Checking for an existing manifest at', manifestPath)
+        fs.readFile(manifestPath, 'utf8', function (err, data) {
+          if (err) console.log('- Can\'t open file')
+          else manifest = JSON.parse(data)
+        })
+      }
+      if (!manifest) {
+        manifest = { data: [] }
+      }
       resolve(instructions)
     } catch (e) {
       console.log(e)
@@ -36,7 +48,7 @@ function addData (data, options) {
   return new Promise((resolve, reject) => {
     try {
       var properties = options.properties
-      var finalized = _.mapValues(properties, function(v) {
+      var finalized = _.mapValues(properties, function (v) {
         if (_.has(data, v) && _.isArray(data[v])) {
           return data[v]
         } else {
@@ -52,7 +64,7 @@ function addData (data, options) {
   })
 }
 
-function writeManifest() {
+function writeManifest () {
   return new Promise((resolve, reject) => {
     try {
       if (manifestPath) {
@@ -63,7 +75,7 @@ function writeManifest() {
           console.log('Writing manifest to:', manifestPath)
           mkdirp(path.dirname(manifestPath), function (err) {
             if (err) throw err
-            fs.writeFile(manifestPath, JSON.stringify(manifest, null, " "), function(err) {
+            fs.writeFile(manifestPath, JSON.stringify(manifest, null, ' '), function (err) {
               if (err) throw err
               resolve(true)
             })
@@ -78,12 +90,7 @@ function writeManifest() {
       resolve(false)
     }
   })
-
-
-
-
 }
-
 
 module.exports = {
   onStart: start,

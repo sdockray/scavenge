@@ -27,6 +27,26 @@ test('translate.onData(input, options) - it translates data[key] using regex in 
   t.end()
 })
 
+test('translate.onData(input, options) - it does not effect data variables not included in options', (t) => {
+  const options = {
+    raw: {
+      match: '\\w+',
+      to: {
+        new: '$0'
+      }
+    }
+  }
+  const input = {
+    raw: 'this yes',
+    new: 'this',
+    something: 'not'
+  }
+  const expectedOutput = { raw: input.raw, something: input.something, new: 'this' }
+  const output = translate.onData(input, options)
+  t.same(expectedOutput, output)
+  t.end()
+})
+
 test('translate.onEnd() returns object passed to it', (t) => {
   var input = { foo: 'bar' }
   var returned = translate.onStart(input)

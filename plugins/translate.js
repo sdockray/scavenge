@@ -8,6 +8,7 @@ function convertMatchToString (match, template) {
 
 function translateVariable (data, input, options) {
   let output = input
+  if (output === undefined) return options.default
   const re = options.match && new RegExp(options.match)
   _.each(options.to, (translator, newVariable) => {
     if (options.match) {
@@ -20,7 +21,7 @@ function translateVariable (data, input, options) {
       }
     }
   })
-  return (output !== undefined) ? output : options.default
+  return output
 }
 
 function translate (data, config) {
@@ -30,7 +31,7 @@ function translate (data, config) {
     // get value/s to translate
     const toTranslate = data[variable]
     // if it is a string, iterate over each and make new
-    if (toTranslate && typeof toTranslate === 'string') {
+    if (toTranslate === undefined || typeof toTranslate === 'string') {
       if (Array.isArray(optionList)) {
         optionList.forEach((options) => {
           data[variable] = translateVariable(data, toTranslate, options)

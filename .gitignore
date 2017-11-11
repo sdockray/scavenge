@@ -13,3 +13,5 @@ saved/
 Progressive\ Librarians\ Guild/
 data.sqlite
 .DS_Store
+
+.nyc_output/

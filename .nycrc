@@ -1,0 +1,11 @@
+{
+  "exclude": [
+    "libcom/",
+    "Progressive Librarians Guild/"
+  ],
+  "include": [
+     "plugins/*.js",
+     "lib/*.js"
+  ],
+  "all": true
+}

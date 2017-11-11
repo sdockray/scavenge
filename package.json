@@ -7,8 +7,9 @@
     "scavenge": "bin.js"
   },
   "scripts": {
-    "test": "tape ./test/*.test.js",
-    "test-pretty": "tape ./test/*.test.js | faucet"
+    "test": "nyc tape ./test/*.test.js | tap-nyc",
+    "test-pretty": "tape ./test/*.test.js | faucet",
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov"
   },
   "repository": {
     "type": "git",
@@ -41,9 +42,11 @@
   },
   "devDependencies": {
     "faucet": "0.0.1",
+    "nyc": "^11.3.0",
     "proxyquire": "^1.8.0",
     "sinon": "^4.1.2",
     "standard": "^10.0.3",
+    "tap-nyc": "^1.0.3",
     "tape": "^4.8.0"
   }
 }

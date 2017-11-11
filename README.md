@@ -12,7 +12,15 @@ Scavenge can be used as a module or as command line program
 
 ```
 scavenge ./path/to/json/configuration.json
+
+scavenge ./path/to/json/configuration.json find=".element ul li:first" #overrides a setting in the JSON
+
 ```
+
+#### Options
+**-z** stop before executing any actions
+**-s <filename>** save scraping data to a file and don't execute ay actions
+**-l <filename>** load scraping data from a file and ONLY execute actions
 
 or see [an example](./example.js)
 

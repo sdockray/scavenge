@@ -27,6 +27,56 @@ test('translate.onData() - it translates data[key] using regex in options[key].m
   t.end()
 })
 
+test('translate.onData() - options[key] accepts an array options which are applied in order', (t) => {
+  const options = {
+    statement: [{
+      match: '(\\d+) \\+ (\\d+)',
+      to: {
+        a: '$1',
+        b: '$2'
+      }
+    },
+    {
+      match: ' = (\\d+)',
+      to: {
+        c: '$1'
+      }
+    }]
+  }
+  const input = {
+    statement: '2 + 2 = 5'
+  }
+  const expectedOutput = { statement: input.statement, a: '2', b: '2', c: '5' }
+  const output = translate.onData(input, options)
+  t.same(output, expectedOutput)
+  t.end()
+})
+
+test('translate.onData() - handles input variables being arrays', (t) => {
+  const options = {
+    statement: [{
+      match: '(\\d+) \\+ (\\d+)',
+      to: {
+        a: '$1',
+        b: '$2'
+      }
+    },
+    {
+      match: ' = (\\d+)',
+      to: {
+        c: '$1'
+      }
+    }]
+  }
+  const input = {
+    statement: ['2 + 2 = 5', '3 + 1 = 4']
+  }
+  const expectedOutput = { statement: input.statement, a: ['2', '3'], b: ['2', '1'], c: ['5', '4'] }
+  const output = translate.onData(input, options)
+  t.same(output, expectedOutput)
+  t.end()
+})
+
 test('translate.onData() - it does not effect data variables not included in options', (t) => {
   const options = {
     raw: {

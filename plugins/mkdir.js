@@ -1,7 +1,5 @@
-var path = require('path')
 var mkdirp = require('mkdirp')
-var fs = require('fs')
-var utils = require('../utils')
+var utils = require('../lib/utils')
 var tpl = utils.tpl
 
 // This is a super-simple plugin for creating a directory

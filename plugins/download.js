@@ -4,7 +4,8 @@ var mkdirp = require('mkdirp')
 var validUrl = require('valid-url')
 var fs = require('fs')
 var _ = require('lodash')
-var utils = require('../utils')
+
+var utils = require('../lib/utils')
 var tpl = utils.tpl
 
 /*

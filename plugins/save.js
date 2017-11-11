@@ -1,10 +1,10 @@
 var _ = require('lodash')
-var utils = require('../utils')
-var tpl = utils.tpl
 var path = require('path')
 var mkdirp = require('mkdirp')
 var fs = require('fs')
 
+var utils = require('../lib/utils')
+var tpl = utils.tpl
 /*
   Config options
   filepath: where to save the file
@@ -51,7 +51,7 @@ function writeFile() {
           fs.writeFile(savePath, JSON.stringify(allData, null, " "), function(err) {
             if (err) throw err
             resolve(true)
-          }) 
+          })
         })
       } else {
         console.log('No file path was given for saving the data!')
@@ -62,10 +62,10 @@ function writeFile() {
       resolve(false)
     }
   })
-  
-  
-  
-  
+
+
+
+
 }
 
 

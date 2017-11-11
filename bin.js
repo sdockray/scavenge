@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-var pkg = require('./package.json')
 var cli = require('commander')
 var _ = require('lodash')
+var pkg = require('./package.json')
 var scavenge = require('.')
 
 console.log('Preparing to scavenge...')

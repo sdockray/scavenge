@@ -1,9 +1,10 @@
 var _ = require('lodash')
-var utils = require('../utils')
-var tpl = utils.tpl
 var path = require('path')
 var mkdirp = require('mkdirp')
 var fs = require('fs')
+
+var utils = require('../lib/utils')
+var tpl = utils.tpl
 
 /*
   Config options
@@ -65,7 +66,7 @@ function writeManifest() {
             fs.writeFile(manifestPath, JSON.stringify(manifest, null, " "), function(err) {
               if (err) throw err
               resolve(true)
-            }) 
+            })
           })
         }
       } else {
@@ -77,10 +78,10 @@ function writeManifest() {
       resolve(false)
     }
   })
-  
-  
-  
-  
+
+
+
+
 }
 
 

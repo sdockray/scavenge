@@ -4,7 +4,7 @@ var path = require('path')
 var mkdirp = require('mkdirp')
 var fs = require('fs')
 var _ = require('lodash')
-var utils = require('../utils')
+var utils = require('../lib/utils')
 var tpl = utils.tpl
 
 var template = '<main class="markdown-body" style="max-width: 888px; margin: 60px auto;"><h1>{{TITLE}}</h1>{{CONTENT}}</main>'

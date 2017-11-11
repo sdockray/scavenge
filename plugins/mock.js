@@ -1,5 +1,5 @@
 
-var utils = require('../utils')
+var utils = require('../lib/utils')
 var tpl = utils.tpl
 
 /*
@@ -16,15 +16,15 @@ function download (data, config) {
         var filepath = (config.filepath) ? tpl(config.filepath, data) : undefined
         var dir = (config.directory) ? tpl(config.directory, data) : undefined
         if (filepath) {
-          console.log('downloading', url, filepath);
+          console.log('downloading', url, filepath)
           setTimeout(() => {
-            console.log('downloaded', url, filepath);
+            console.log('downloaded', url, filepath)
             resolve(data)
           }, 500)
         } else if (dir) {
-          console.log('downloading', url, dir);
+          console.log('downloading', url, dir)
           setTimeout(() => {
-            console.log('downloaded', url, dir);
+            console.log('downloaded', url, dir)
             resolve(data)
           }, 500)
         }

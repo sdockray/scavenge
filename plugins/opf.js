@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const mkdirp = require('mkdirp')
 const OPF = require('open-packaging-format')
-var utils = require('../utils')
+var utils = require('../lib/utils')
 var tpl = utils.tpl
 
 function makeOpf (data, config) {
@@ -11,7 +11,7 @@ function makeOpf (data, config) {
     const file = config.filename ? tpl(config.filename, data) : 'metadata.opf'
     const opf = new OPF()
     opf.title = data.title
-    const filepath = path.join(dir, file )
+    const filepath = path.join(dir, file)
     mkdirp(config.directory, (err) => {
       if (err) return reject(err)
       fs.writeFile(filepath, opf.toXML(), (e) => {

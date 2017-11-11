@@ -8,7 +8,7 @@ test('translate.onStart() returns object passed to it', (t) => {
   t.end()
 })
 
-test('translate.onData(input, options) - it translates data[key] using regex in options[key].match and options[key].to specifies new keys to be added to data', (t) => {
+test('translate.onData() - it translates data[key] using regex in options[key].match and options[key].to specifies new keys to be added to data', (t) => {
   const options = {
     raw: {
       match: '\\n(?:[\\s\\S]*by\\s([\\s\\S]+), )?page (\\d+) \\[\\.pdf file\\]',
@@ -27,7 +27,7 @@ test('translate.onData(input, options) - it translates data[key] using regex in 
   t.end()
 })
 
-test('translate.onData(input, options) - it does not effect data variables not included in options', (t) => {
+test('translate.onData() - it does not effect data variables not included in options', (t) => {
   const options = {
     raw: {
       match: '\\w+',
@@ -47,7 +47,7 @@ test('translate.onData(input, options) - it does not effect data variables not i
   t.end()
 })
 
-test('translate.onData(input, options) - options[key].default sets an optional value if the data[key] is undefined', (t) => {
+test('translate.onData() - options[key].default sets an optional value if the data[key] is undefined', (t) => {
   const options = {
     x: {
       default: 'property is theft'
@@ -55,6 +55,23 @@ test('translate.onData(input, options) - options[key].default sets an optional v
   }
   const input = {}
   const expectedOutput = { x: 'property is theft' }
+  const output = translate.onData(input, options)
+  t.same(output, expectedOutput)
+  t.end()
+})
+
+test('translate.onData() - options[key].default sets an optional value if match is not found', (t) => {
+  const options = {
+    x: {
+      default: 'property is theft',
+      match: '\\d+',
+      to: {
+        y: '$0'
+      }
+    }
+  }
+  const input = { x: 'rent' }
+  const expectedOutput = { x: 'rent', y: 'property is theft' }
   const output = translate.onData(input, options)
   t.same(output, expectedOutput)
   t.end()

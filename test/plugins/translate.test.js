@@ -33,20 +33,22 @@ test('translate.onData() - options[key] accepts an array options which are appli
       match: '(\\d+) \\+ (\\d+)',
       to: {
         a: '$1',
-        b: '$2'
+        b: '$2',
+        d: '$0'
       }
     },
     {
       match: ' = (\\d+)',
       to: {
-        c: '$1'
+        c: '$1',
+        d: '$0'
       }
     }]
   }
   const input = {
     statement: '2 + 2 = 5'
   }
-  const expectedOutput = { statement: input.statement, a: '2', b: '2', c: '5' }
+  const expectedOutput = { statement: input.statement, a: '2', b: '2', c: '5', d: ' = 5' }
   const output = translate.onData(input, options)
   t.same(output, expectedOutput)
   t.end()

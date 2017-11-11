@@ -27,6 +27,22 @@ test('translate.onData() - it translates data[key] using regex in options[key].m
   t.end()
 })
 
+test('translate.onData() - do nothing if options[key] is not found in data and default is not set', (t) => {
+  const options = {
+    raw: {
+      match: '...',
+      to: {
+        new: '$0'
+      }
+    }
+  }
+  const input = { a: 'b' }
+  const expectedOutput = input
+  const output = translate.onData(input, options)
+  t.same(output, expectedOutput)
+  t.end()
+})
+
 test('translate.onData() - options[key] accepts an array options which are applied in order', (t) => {
   const options = {
     statement: [{

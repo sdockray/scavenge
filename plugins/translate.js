@@ -8,6 +8,7 @@ function convertMatchToString (match, template) {
 
 function translateVariable (data, input, options) {
   let output = input
+  if (output === undefined) return options.default
   const re = options.match && new RegExp(options.match)
   _.each(options.to, (translator, newVariable) => {
     if (options.match) {
@@ -20,7 +21,7 @@ function translateVariable (data, input, options) {
       }
     }
   })
-  return (output !== undefined) ? output : options.default
+  return output
 }
 
 function translate (data, config) {

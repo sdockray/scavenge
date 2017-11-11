@@ -43,7 +43,20 @@ test('translate.onData(input, options) - it does not effect data variables not i
   }
   const expectedOutput = { raw: input.raw, something: input.something, new: 'this' }
   const output = translate.onData(input, options)
-  t.same(expectedOutput, output)
+  t.same(output, expectedOutput)
+  t.end()
+})
+
+test('translate.onData(input, options) - options[key].default sets an optional value if the data[key] is undefined', (t) => {
+  const options = {
+    x: {
+      default: 'property is theft'
+    }
+  }
+  const input = {}
+  const expectedOutput = { x: 'property is theft' }
+  const output = translate.onData(input, options)
+  t.same(output, expectedOutput)
   t.end()
 })
 

@@ -30,7 +30,7 @@ function translate (data, config) {
     // get value/s to translate
     const toTranslate = data[variable]
     // if it is a string, iterate over each and make new
-    if (toTranslate && typeof toTranslate === 'string') {
+    if (toTranslate === undefined || typeof toTranslate === 'string') {
       if (Array.isArray(optionList)) {
         optionList.forEach((options) => {
           data[variable] = translateVariable(data, toTranslate, options)

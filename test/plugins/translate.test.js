@@ -146,7 +146,6 @@ test('translate.onData() - options[key].default sets an optional value if match 
 })
 
 test('translate.onData() - options[key].transform transforms the data[key] and its matches (if present)', (t) => {
-
   const cases = [
     {
       transform: 'sentence',
@@ -243,9 +242,22 @@ test('translate.onData() - options[key].transform transforms the data[key] and i
   t.end()
 })
 
+test('translate.onData() - options[key].transform can be an array, transforms will be applied in order', (t) => {
+  const options = {
+    a: {
+      transform: ['lower', 'kebab', 'upperFirst']
+    }
+  }
+  const input = { a: 'FESTINA LENTE' }
+  const expectedOutput = { a: 'Festina-lente' }
+  const output = translate.onData(input, options)
+  t.same(output, expectedOutput)
+  t.end()
+})
+
 test('translate.onEnd() returns object passed to it', (t) => {
   var input = { foo: 'bar' }
-  var returned = translate.onStart(input)
+  var returned = translate.onEnd(input)
   t.ok(returned === input)
   t.end()
 })

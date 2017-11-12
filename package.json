@@ -10,7 +10,7 @@
     "test": "nyc tape 'test/**/*.test.js' | tap-nyc",
     "test-pretty": "tape 'test/**/*.test.js' | faucet",
     "test-tdd": "tape-watch 'test/**/*.test.js' | faucet",
-    "coverage": "nyc report --reporter=text-lcov > coverage.lcov"
+    "coverage": "nyc report --reporter=html"
   },
   "repository": {
     "type": "git",

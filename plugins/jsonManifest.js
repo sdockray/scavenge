@@ -5,7 +5,6 @@ var fs = require('fs')
 
 var utils = require('../lib/utils')
 var tpl = utils.tpl
-var tryToRequire = utils.tryToRequire
 
 /*
   Config options

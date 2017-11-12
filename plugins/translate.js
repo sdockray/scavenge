@@ -14,9 +14,7 @@ var caseTranslationFuncs = {
   deburr: _.deburr,
   toLower: _.toLower,
   toUpper: _.toUpper,
-  parseInt: _.parseInt,
-  escape: _.escape,
-  unescape: _.unescape
+  parseInt: _.parseInt
 }
 
 function mapSingleOrArray (input, fn) {

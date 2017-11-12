@@ -146,25 +146,82 @@ test('translate.onData() - options[key].default sets an optional value if match 
 })
 
 test('translate.onData() - options[key].transform transforms the data[key] and its matches (if present)', (t) => {
+
   const cases = [
-    { transform: 'sentence', input: 'for some reason!', result: 'For some reason!' },
-    { transform: 'title', input: '', result: '' },
-    { transform: 'heading', input: 'forever-not-Like', result: 'Foo BAR B' },
-    { transform: 'lower', input: '', result: '' },
-    { transform: 'upper', input: '', result: '' },
-    { transform: 'lowerFirst', input: '', result: '' },
-    { transform: 'upperFirst', input: '', result: '' },
-    { transform: 'camel', input: '', result: '' },
-    { transform: 'kebab', input: '', result: '' },
-    { transform: 'snake', input: '', result: '' },
-    { transform: 'deburr', input: '', result: '' },
-    { transform: 'toLower', input: '', result: '' },
-    { transform: 'toUpper', input: '', result: '' },
-    { transform: 'parseInt', input: '', result: '' },
-    { transform: 'escape', input: '', result: '' },
-    { transform: 'unescape', input: '', result: '' }
+    {
+      transform: 'sentence',
+      input: 'along the Journey of Our LIFE half way,',
+      result: 'Along the journey of our life half way,'
+    },
+    {
+      transform: 'title',
+      input: 'At the midpoint in the journey of our life',
+      result: 'At the midpoint in the journey of our life'
+    },
+    {
+      transform: 'heading',
+      input: 'HALF over the wayfaring of our life,',
+      result: 'HALF Over The Wayfaring Of Our Life'
+    },
+    {
+      transform: 'lower',
+      input: 'HalfWayAlongThe RoadWe Have to Go,',
+      result: 'half way along the road we have to go'
+    },
+    {
+      transform: 'upper',
+      input: 'Halfway-along-the_journey_of_our_life',
+      result: 'HALFWAY ALONG THE JOURNEY OF OUR LIFE'
+    },
+    {
+      transform: 'lowerFirst',
+      input: 'HALFWAY on our life’s journey, in a wood',
+      result: 'hALFWAY on our life’s journey, in a wood'
+    },
+    {
+      transform: 'upperFirst',
+      input: 'Halfway through our trek in life',
+      result: 'Halfway through our trek in life'
+    },
+    {
+      transform: 'camel',
+      input: 'Half-way upon the journey of our life,',
+      result: 'halfWayUponTheJourneyOfOurLife'
+    },
+    {
+      transform: 'kebab',
+      input: 'HALF-WAY upon the journey of our life',
+      result: 'half-way-upon-the-journey-of-our-life'
+    },
+    {
+      transform: 'snake',
+      input: 'In middle of the journey of our days',
+      result: 'in_middle_of_the_journey_of_our_days'
+    },
+    {
+      transform: 'deburr',
+      input: 'déjà vu',
+      result: 'deja vu'
+    },
+    {
+      transform: 'toLower',
+      input: 'In midWay oF THE journey of our life',
+      result: 'in midway of the journey of our life'
+    },
+    {
+      transform: 'toUpper',
+      input: 'In our life’s journey at its midway stage',
+      result: 'IN OUR LIFE’S JOURNEY AT ITS MIDWAY STAGE'
+    },
+    {
+      transform: 'parseInt',
+      input: '100.0',
+      result: 100
+    }
   ]
-  for (var c in cases) {
+  for (var i = 0; i < cases.length; i++) {
+    const c = cases[i]
+    t.comment('transform ' + i + ':' + c.transform)
     const options = {
       x: {
         default: c.input,

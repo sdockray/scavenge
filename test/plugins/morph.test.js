@@ -58,12 +58,14 @@ test('morph.onStart() - options.refresh = true will drop the table and recreate 
   const spys = mock.spys
   const input = { foo: 'bar' }
   const options = {
-    refesh: true,
+    name: 'custom_name.sql',
+    refresh: true,
     columns: ['a']
   }
+
   mock.morph.onStart(input, options)
   .then((result, options) => {
-    t.ok(spys.db.calledWith('data.sqlite'))
+    t.ok(spys.db.calledWith('custom_name.sql'))
     t.ok(spys.serialize.calledOnce)
     t.ok(spys.run.calledTwice)
     t.same(spys.run.firstCall.args[0], `DROP TABLE IF EXISTS data`)
@@ -74,10 +76,26 @@ test('morph.onStart() - options.refresh = true will drop the table and recreate 
   .catch(t.error)
 })
 
-test('morph.onData() - returns promise, and returns the data passed to it unmodified', (t) => {
+test('morph.onData() - inserts variables from data that are specified in options.columns', (t) => {
   const mock = requireMock()
-  const input = { foo: 'bar' }
-  const options = { }
+  const spys = mock.spys
+  const input = { a: 'this', b: 'or', c: 'that', d: 'and' }
+  const options = { columns: ['a', 'd', 'c'] }
+  mock.morph.onStart({}, options)
+    .then(() => mock.morph.onData(input, options))
+    .then((result) => {
+      t.ok(spys.serialize.calledTwice)
+      t.ok(spys.prepare.calledOnce)
+      t.same(spys.prepare.firstCall.args[0], `INSERT INTO data (a,d,c) VALUES (?,?,?)`)
+      t.ok(input === result)
+      t.end()
+    })
+})
+
+test('morph.onData() - do nothing if there is an error', (t) => {
+  const mock = requireMock()
+  const input = { a: 'this', b: 'or', c: 'that', d: 'and' }
+  const options = { columns: ['a', 'd', 'c'] }
   mock.morph.onData(input, options)
     .then((result) => {
       t.ok(input === result)

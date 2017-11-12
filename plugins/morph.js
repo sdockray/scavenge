@@ -16,7 +16,7 @@ function start (instructions, options) {
       db = new sqlite3.Database(options.name || 'data.sqlite')
       db.serialize(() => {
         const table = options.table || 'data'
-        if (options.refesh) {
+        if (options.refresh) {
           db.run(`DROP TABLE IF EXISTS ${table}`)
         }
         const columns = options.columns.join(' TEXT, ')

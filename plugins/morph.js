@@ -3,6 +3,7 @@ var sqlite3 = require('sqlite3').verbose()
 /*
   Config options
   file: name of db - defaults to data.sqlite
+  refresh: bool - if true drops table if it already exists
   table: name of table - defaults to data
   columns: list of variable names to include as columns in the table
  */

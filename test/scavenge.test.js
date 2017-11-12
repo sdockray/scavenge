@@ -23,7 +23,7 @@ server('/find', function (url, req, res) {
   res.end()
 })
 
-test('scavenge.go(instructions)', (t) => {
+test('scavenge.go(instructions - simple usage)', (t) => {
   const pluginStartFn = sinon.stub().callsFake(a => a)
   const pluginDataFn = sinon.stub().callsFake(a => a)
   const instructions = {
@@ -58,6 +58,54 @@ test('scavenge.go(instructions)', (t) => {
           yes: true
         }, 'a plugin’s onEnd() receives the plugin options as as second arg')
         t.end()
+        return data
+      }
+    }
+  })
+  scavenge.go(instructions)
+})
+
+test('scavenge.go(instructions) - it tries to resolve plugins at scavenge-plugin-{name}, {name} and ../plugins/{name}', (t) => {
+  t.timeoutAfter(500)
+  t.plan(3)
+  const instructions = {
+    origin: testDomain + '/find',
+    find: 'img',
+    variables: {
+      'img': '@src'
+    },
+    actions: {
+      'translate': {},
+      'morph': {},
+      'download': {},
+      'notFound': {}
+    }
+  }
+  const scavenge = proxyquire('../lib/scavenge', {
+    'translate': {
+      '@noCallThru': true,
+      onStart: a => a,
+      onData: a => a,
+      onEnd: (data, options) => {
+        t.pass('resolved translate as itself')
+        return data
+      }
+    },
+    'scavenge-plugin-morph': {
+      '@noCallThru': true,
+      onStart: a => a,
+      onData: a => a,
+      onEnd: (data, options) => {
+        t.pass('resolved morph as scavenger-plugin-morph')
+        return data
+      }
+    },
+    '../plugins/download': {
+      '@noCallThru': true,
+      onStart: a => a,
+      onData: a => a,
+      onEnd: (data, options) => {
+        t.pass('resolved download as ../plugins/download')
         return data
       }
     }

@@ -43,7 +43,7 @@ test('translate.onData() - do nothing if options[key] is not found in data and d
   t.end()
 })
 
-test('translate.onData() - options[key] accepts an array options which are applied in order', (t) => {
+test('translate.onData() - options[key] accepts an array of options which are each applied in order', (t) => {
   const options = {
     statement: [{
       match: '(\\d+) \\+ (\\d+)',
@@ -142,6 +142,47 @@ test('translate.onData() - options[key].default sets an optional value if match 
   const expectedOutput = { x: 'rent', y: 'property is theft' }
   const output = translate.onData(input, options)
   t.same(output, expectedOutput)
+  t.end()
+})
+
+test('translate.onData() - options[key].transform transforms the data[key] and its matches (if present)', (t) => {
+  const cases = [
+    { transform: 'sentence', input: 'for some reason!', result: 'For some reason!' },
+    { transform: 'title', input: '', result: '' },
+    { transform: 'heading', input: 'forever-not-Like', result: 'Foo BAR B' },
+    { transform: 'lower', input: '', result: '' },
+    { transform: 'upper', input: '', result: '' },
+    { transform: 'lowerFirst', input: '', result: '' },
+    { transform: 'upperFirst', input: '', result: '' },
+    { transform: 'camel', input: '', result: '' },
+    { transform: 'kebab', input: '', result: '' },
+    { transform: 'snake', input: '', result: '' },
+    { transform: 'deburr', input: '', result: '' },
+    { transform: 'toLower', input: '', result: '' },
+    { transform: 'toUpper', input: '', result: '' },
+    { transform: 'parseInt', input: '', result: '' },
+    { transform: 'escape', input: '', result: '' },
+    { transform: 'unescape', input: '', result: '' }
+  ]
+  for (var c in cases) {
+    const options = {
+      x: {
+        default: c.input,
+        match: '.+',
+        to: {
+          y: '$0'
+        },
+        transform: c.transform
+      },
+      a: {
+        transform: c.transform
+      }
+    }
+    const input = { x: c.input, a: c.input }
+    const expectedOutput = { x: c.result, y: c.result, a: c.result }
+    const output = translate.onData(input, options)
+    t.same(output, expectedOutput)
+  }
   t.end()
 })
 

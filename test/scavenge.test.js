@@ -33,7 +33,7 @@ test('scavenge.go(instructions)', (t) => {
       'img': '@src'
     },
     actions: {
-      test: {
+      'test-plugin': {
         foo: 'bar',
         baz: 123,
         yes: true
@@ -42,7 +42,7 @@ test('scavenge.go(instructions)', (t) => {
   }
 
   const scavenge = proxyquire('../lib/scavenge', {
-    'test': {
+    'test-plugin': {
       '@noCallThru': true,
       onStart: pluginStartFn,
       onData: pluginDataFn,

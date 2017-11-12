@@ -3,9 +3,9 @@ const test = require('tape')
 const sinon = require('sinon')
 
 function requireMock () {
-  const serialize = sinon.stub()
-  const run = sinon.stub()
-  const finalize = sinon.stub()
+  const serialize = sinon.stub().callsFake(cb => cb())
+  const run = sinon.stub().callsFake((arg, cb) => cb && cb())
+  const finalize = sinon.stub().callsFake(cb => cb())
   const prepareRun = sinon.stub()
   const prepare = sinon.stub().callsFake(() => ({
     run: prepareRun,
@@ -40,16 +40,17 @@ test('morph.onStart() - returns promise which eventually returns the object pass
   const spys = mock.spys
   const input = { foo: 'bar' }
   const options = { columns: ['a', 'b', 'c'] }
+  t.comment('start')
   mock.morph.onStart(input, options)
-  .then((result, options) => {
-    t.ok(spys.db.calledWith('data.sqlite3'))
-    t.ok(spys.serialize.calledOnce)
-    t.comment('it creates a table with options.columns')
-    t.ok(spys.run.calledOnce)
-    t.ok(spys.run.calledWith(`CREATE TABLE IF NOT EXISTS data (a TEXT, b TEXT, c TEXT)`))
-    t.ok(input === result)
-    t.end()
-  })
+    .then((result, options) => {
+      t.ok(spys.db.calledWith('data.sqlite'))
+      t.ok(spys.serialize.calledOnce)
+      t.comment('it creates a table with options.columns')
+      t.ok(spys.run.calledOnce)
+      t.same(spys.run.firstCall.args[0], `CREATE TABLE IF NOT EXISTS data (a TEXT, b TEXT, c TEXT)`)
+      t.ok(input === result)
+      t.end()
+    }).catch(t.error)
 })
 
 test('morph.onStart() - options.refresh = true will drop the table and recreate it ', (t) => {
@@ -62,16 +63,15 @@ test('morph.onStart() - options.refresh = true will drop the table and recreate 
   }
   mock.morph.onStart(input, options)
   .then((result, options) => {
-    t.ok(spys.db.calledWith('data.sqlite3'))
-    t.ok(spys.run.calledTwice)
+    t.ok(spys.db.calledWith('data.sqlite'))
     t.ok(spys.serialize.calledOnce)
     t.ok(spys.run.calledTwice)
-    const calls = spys.run.calls()
-    t.ok(calls[0].args(`DROP TABLE IF EXISTS data`))
-    t.ok(calls[1].args(`CREATE TABLE IF NOT EXISTS data (a TEXT)`))
+    t.same(spys.run.firstCall.args[0], `DROP TABLE IF EXISTS data`)
+    t.same(spys.run.secondCall.args[0], `CREATE TABLE IF NOT EXISTS data (a TEXT)`)
     t.ok(input === result)
     t.end()
   })
+  .catch(t.error)
 })
 
 test('morph.onData() - returns promise, and returns the data passed to it unmodified', (t) => {
@@ -79,10 +79,10 @@ test('morph.onData() - returns promise, and returns the data passed to it unmodi
   const input = { foo: 'bar' }
   const options = { }
   mock.morph.onData(input, options)
-  .then((result) => {
-    t.ok(input === result)
-    t.end()
-  })
+    .then((result) => {
+      t.ok(input === result)
+      t.end()
+    })
 })
 
 test('morph.onEnd() returns object passed to it', (t) => {

@@ -1,0 +1,51 @@
+{
+  "origin": "https://supervalentthought.com",
+  "delay": 1000,
+  "find": "div#sidebar ul li.widget_archive ul li",
+  "variables": {
+    "month": "a",
+    "monthHref": "a@href"
+  },
+  "next": {
+    "follow": "a@href",
+    "find": "#content a[rel='bookmark']",
+    "variables": {
+      "postHref": "@href"
+    },
+    "next": {
+      "follow": "@href",
+      "find": "#content",
+      "variables": {
+        "title": "span.title",
+        "categories": [".cite a[rel='category tag']"],
+        "tags": [".cite a[rel='tag']"]
+      }
+    }
+  },
+  "actions": {
+    "translate": {
+      "postHref": [{
+        "match": "supervalentthought.com/(\\d+)/(\\d+)/(\\d+)/.*",
+        "to": {
+          "year": "$1",
+          "month": "$2",
+          "day": "$3"
+        }
+      }]
+    },
+    "readability": {
+      "url": "${postHref}",
+      "filepath": "Supervalent Thought/${title}/index.html"
+    },
+    "jsonManifest": {
+      "filepath": "Supervalent Thought/manifest.json",
+      "properties": {
+        "title": "${title}", 
+        "date": "${year}-${month}-${day}", 
+        "source": "${postHref}",
+        "categories": "categories",
+        "tags": "tags"
+      }
+    }
+  }
+}

@@ -27,7 +27,7 @@
     },
     "readability": {
       "url": "${info}",
-      "filepath": "OZ/${title} (${date})/index.html"
+      "filepath": "OZ/${title} (${date})/info.html"
     },
     "download": [
       {

@@ -1,0 +1,28 @@
+{
+  "origin": "http://www.taipeibiennial.org/2012/en/journal.html",
+  "delay": 1000,
+  "find": "div.journal-entry",
+  "variables": {
+    "author_raw": "h2",
+    "title": "img@alt",
+    "pdf": ".journal-links > a:nth(1)@href"
+  },
+  "filter": {
+    "pdf": ".pdf"
+  },
+  "actions": {
+    "translate": {
+      "author_raw": {
+        "match": "^By (.+)$",
+        "to": {
+          "author": "$1"
+        }
+      }
+    },
+    "download": {
+      "url": "http://www.taipeibiennial.org/2012/en/${pdf}",
+      "filepath": "TaipeiBiennial2012/${author}/${title}/${author}_${title}.pdf",
+      "overwrite": false
+    }
+  }
+}

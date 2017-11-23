@@ -21,16 +21,15 @@ function download (data, config) {
   return new Promise((resolve, reject) => {
     try {
       if (config.url) {
-        // console.log('HANDING SINGLE URL')
         var url = config.url
         // In case this is an object
         if (_.has(data, url)) {
           url = data[url]
         }
-        var url = tpl(url, data)
+        url = tpl(url, data)
         var filepath = (config.filepath) ? tpl(config.filepath, data) : undefined
         var dir = (config.directory) ? tpl(config.directory, data) : undefined
-        var overwrite = !(_.has(config, 'overwrite') && config.overwrite === false)
+        var overwrite = !(config.overwrite && config.overwrite === false)
         if (validUrl.isUri(url)) {
           if (filepath) {
             if (!overwrite && fs.existsSync(filepath)) {

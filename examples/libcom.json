@@ -56,7 +56,7 @@
     },
     "readability": {
       "url": "https://libcom.org${titleUrl}",
-      "filepath": "libcom/${author}/${title}/index.html",
+      "filepath": "libcom/${author}/${title}/info.html",
       "overwrite": false
     },
     "download": [

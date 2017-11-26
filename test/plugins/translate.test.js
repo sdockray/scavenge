@@ -27,6 +27,38 @@ test('translate.onData() - it translates data[key] using regex in options[key].m
   t.end()
 })
 
+test('translate.onData() - it replaces data[key] using regex in options[key].replace with string specified in options[key].with', (t) => {
+  const options = {
+    raw: {
+      replace: 'viewIssue',
+      with: 'download'
+    }
+  }
+  const input = {
+    raw: 'https://www.performancephilosophy.org/journal/issue/viewIssue/4/4'
+  }
+  const expectedOutput = { raw: 'https://www.performancephilosophy.org/journal/issue/download/4/4' }
+  const output = translate.onData(input, options)
+  t.same(output, expectedOutput)
+  t.end()
+})
+
+test.only('translate.onData() - replace option replaces all instances of matching regex', (t) => {
+  const options = {
+    raw: {
+      replace: '\\w+',
+      with: 'a'
+    }
+  }
+  const input = {
+    raw: 'https://www.performancephilosophy.org/journal/issue/viewIssue/4/4'
+  }
+  const expectedOutput = { raw: 'a://a.a.a/a/a/a/a/a' }
+  const output = translate.onData(input, options)
+  t.same(output, expectedOutput)
+  t.end()
+})
+
 test('translate.onData() - do nothing if options[key] is not found in data and default is not set', (t) => {
   const options = {
     raw: {

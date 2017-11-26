@@ -41,13 +41,20 @@ function convertMatchToString (match, template) {
   }, template)
 }
 
+function replaceString (string, replaceRegex, withString) {
+  return string.replace(new RegExp(replaceRegex, 'g'), withString)
+}
+
 function translateVariable (data, input, options) {
   let output = input
   if (output === undefined) return options.default
+  if (options.replace) {
+    output = mapSingleOrArray(output, v => replaceString(v, options.replace, options.with))
+  }
   if (options.match) {
     const re = new RegExp(options.match)
     _.each(options.to, (translator, newVariable) => {
-      data[newVariable] = mapSingleOrArray(input, (v) => {
+      data[newVariable] = mapSingleOrArray(output, (v) => {
         const matched = v.match(re)
         if (matched) {
           const converted = convertMatchToString(matched, translator)
@@ -60,7 +67,7 @@ function translateVariable (data, input, options) {
     })
   }
   if (options.transform) {
-    return mapSingleOrArray(input, v => transformString(v, options.transform))
+    return mapSingleOrArray(output, v => transformString(v, options.transform))
   }
   return output
 }

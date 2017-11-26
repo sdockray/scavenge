@@ -54,7 +54,7 @@
     "logger": true,
     "download": {
       "url": "${pdf}",
-      "filepath": "PerformancePhilosophy/${authors|fs}/${title|safe}/${title|fs}.pdf",
+      "filepath": "PerformancePhilosophy/${authors|fs}/${title|fs}/${title|fs}.pdf",
       "overwrite": false
     },
     "opf": {

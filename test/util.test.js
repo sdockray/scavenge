@@ -39,6 +39,6 @@ test('can also sanitizes the variables with ${path|safe}', (t) => {
 })
 
 test('can also escapes the variables with ${path|fs}', (t) => {
-  t.same('a\\/filename\\/with\\/slashes', tpl('${dangerous|fs}', { dangerous: 'a/filename/with/slashes' }))
+  t.same('a_filename_with_slashes', tpl('${dangerous|fs}', { dangerous: 'a///filename/with/slashes' }))
   t.end()
 })

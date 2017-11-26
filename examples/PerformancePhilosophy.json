@@ -54,14 +54,14 @@
     "logger": true,
     "download": {
       "url": "${pdf}",
-      "filepath": "PerformancePhilosophy/${authors|safe}/${title|safe}/${title|safe}.pdf",
+      "filepath": "PerformancePhilosophy/${authors|fs}/${title|safe}/${title|fs}.pdf",
       "overwrite": false
     },
     "opf": {
       "description": "abstract",
       "identifiers": ["doi", "issn"],
       "source": "full",
-      "directory": "PerformancePhilosophy/${authors|safe}/${title|safe}/"
+      "directory": "PerformancePhilosophy/${authors|fs}/${title|fs}/"
     }
   }
 }

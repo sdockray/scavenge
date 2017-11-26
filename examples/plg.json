@@ -53,7 +53,7 @@
         "split": true,
         "transform": "trim"
       },
-      "description": "From ${issue_raw}. Section: ${section}"
+      "description": "Starting on page ${page} in ${issue_raw}. Within section: ${section}"
     }],
     "logger": true,
     "opf": {
@@ -61,7 +61,7 @@
     },
     "download": {
       "url": "pdf",
-      "directory": "Progressive Librarians Guild/${author|fs}/${title|fs}/",
+      "directory": "Progressive Librarians Guild/${authors|fs}/${title|fs}/",
       "overwrite": false
     }
   }

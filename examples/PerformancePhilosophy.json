@@ -6,7 +6,7 @@
     "issn": "div#pageFooter"
   },
   "next": {
-    "follow": "h4 a@href:first",
+    "follow": "h4 a@href",
     "find": "table.tocArticle",
     "variables": {
       "issue": ".tocTitle ! table.tocArticle ! #main > h2",
@@ -29,6 +29,10 @@
   },
   "actions": {
     "translate": {
+      "issn": {
+        "replace": "ISSN:",
+        "transform": "trim"
+      },
       "subjects": {
         "replace": "Keywords\\s+",
         "split": ";",
@@ -47,6 +51,17 @@
         "with": "download"
       }
     },
-    "logger": true
+    "logger": true,
+    "download": {
+      "url": "${pdf}",
+      "filepath": "PerformancePhilosophy/${authors|safe}/${title|safe}/${title|safe}.pdf",
+      "overwrite": false
+    },
+    "opf": {
+      "description": "abstract",
+      "identifiers": ["doi", "issn"],
+      "source": "full",
+      "directory": "PerformancePhilosophy/${authors|safe}/${title|safe}/"
+    }
   }
 }

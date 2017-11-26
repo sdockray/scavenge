@@ -37,9 +37,9 @@ function transformString (input, transformOption) {
   return fn(input)
 }
 
-function convertMatchToString (match, template) {
+function convertMatchToString (match, template, fallback) {
   return match.reduce((prev, group, index) => {
-    return prev.replace(new RegExp(`\\$${index}`, 'g'), group)
+    return prev.replace(new RegExp(`\\$${index}`, 'g'), group || fallback)
   }, template)
 }
 
@@ -69,7 +69,7 @@ function translateVariable (data, input, options) {
       data[newVariable] = mapSingleOrArray(output, (v) => {
         const matched = v.match(re)
         if (matched) {
-          const converted = convertMatchToString(matched, translator)
+          const converted = convertMatchToString(matched, translator, options.default)
           // optionally transform each matched string
           return (options.transform)
             ? transformString(converted, options.transform)

@@ -98,7 +98,7 @@ test('translate.onData() - options[key].split also works with arrays', (t) => {
   const input = {
     raw: ['a b c', 'd e f', 'g e h']
   }
-  const expectedOutput = { raw: [['a', 'b', 'c'], ['d', 'e', 'f'] , ['g', 'e', 'h']] }
+  const expectedOutput = { raw: [['a', 'b', 'c'], ['d', 'e', 'f'], ['g', 'e', 'h']] }
   const output = translate.onData(input, options)
   t.same(output, expectedOutput)
   t.end()
@@ -293,6 +293,11 @@ test('translate.onData() - options[key].transform transforms the data[key] and i
       transform: 'parseInt',
       input: '100.0',
       result: 100
+    },
+    {
+      transform: 'trim',
+      input: '   Caroline Bergvall     ',
+      result: 'Caroline Bergvall'
     }
   ]
   for (var i = 0; i < cases.length; i++) {

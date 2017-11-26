@@ -2,7 +2,7 @@ var _ = require('lodash')
 
 var caseTranslationFuncs = {
   sentence: _.capitalize,
-  title: (str) => _.capitalize(_.toLower(str)),
+  title: str => _.capitalize(_.toLower(str)),
   heading: _.startCase,
   lower: _.lowerCase,
   upper: _.upperCase,
@@ -14,7 +14,8 @@ var caseTranslationFuncs = {
   deburr: _.deburr,
   toLower: _.toLower,
   toUpper: _.toUpper,
-  parseInt: _.parseInt
+  parseInt: _.parseInt,
+  trim: str => str && str.trim()
 }
 
 function mapSingleOrArray (input, fn) {

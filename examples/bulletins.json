@@ -1,0 +1,9 @@
+{
+  "origin": "http://www.servinglibrary.org",
+  "find": "#main-container",
+  "variables": {
+    "caption": [".caption"]
+  },
+  "actions": {
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "origin": "https://www.performancephilosophy.org/journal/issue/archive",
+  "delay": 1000,
+  "find": "#content",
+  "variables": {
+    "issn": "div#pageFooter"
+  },
+  "next": {
+    "follow": "h4 a@href"
+  },
+  "actions": {
+    "logger": true
+  }
+}

@@ -16,7 +16,7 @@ function scavengeJsonFile (name) {
 }
 
 // Testing entry point
-scavengeJsonFile('./examples/libcom.json')
+scavengeJsonFile('./examples/PerformancePhilosophy.json')
 
 // var download = require('./plugins/download')
 // download.onData(

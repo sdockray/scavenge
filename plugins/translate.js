@@ -1,6 +1,7 @@
-var _ = require('lodash')
+const { tpl } = require('../lib/utils')
+const _ = require('lodash')
 
-var caseTranslationFuncs = {
+const caseTranslationFuncs = {
   sentence: _.capitalize,
   title: str => _.capitalize(_.toLower(str)),
   heading: _.startCase,
@@ -93,7 +94,11 @@ function translate (data, config) {
     // get value/s to translate
     const toTranslate = data[variable]
     mapSingleOrArray(optionList, (options) => {
-      data[variable] = translateVariable(data, toTranslate, options)
+      if (typeof options === 'string') {
+        data[variable] = tpl(options, data)
+      } else {
+        data[variable] = translateVariable(data, toTranslate, options)
+      }
     })
   })
   return data

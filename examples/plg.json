@@ -1,8 +1,15 @@
 {
   "origin": "http://www.progressivelibrariansguild.org/PL_Jnl/jnl_contents.shtml",
-  "find": "div.content p:not([class]) a",
+  "find": "div.content p:not([class])",
+  "variables": {
+    "source": "a@href",
+    "issue_raw": "a !> p"
+  },
+  "filter": {
+    "source": "\\w+"
+  },
   "next": {
-    "follow": "@href",
+    "follow": "a@href",
     "find": "p",
     "variables": {
       "section": "a !> p !~ p strong:last",
@@ -14,24 +21,47 @@
     }
   },
   "actions": {
-    "translate": {
-      "title_raw": [
-      {
+    "translate": [{
+      "section": {
+        "transform": "title"
+      },
+      "issue_raw": {
+        "match": "(.+?), (.+)",
+        "to": {
+          "issue": "$1",
+          "date": "$2"
+        }
+      },
+      "title_raw": [{
         "match": "\\n(?:[\\s\\S]*by\\s([\\s\\S]+), )?page (\\d+) \\[\\.pdf file\\]",
         "to": {
-          "author": "$1",
+          "authors": "$1",
           "page": "$2"
-        }
+        },
+        "default": "PLG"
       }, {
         "match": "^([\\s\\S]+)\\n",
         "to": {
           "title": "$1"
         }
       }]
+    },{
+      "title": {
+        "transform": "title"
+      },
+      "authors": {
+        "split": true,
+        "transform": "trim"
+      },
+      "description": "From ${issue_raw}. Section: ${section}"
+    }],
+    "logger": true,
+    "opf": {
+      "directory": "Progressive Librarians Guild/${authors|fs}/${title|fs}/"
     },
     "download": {
       "url": "pdf",
-      "directory": "Progressive Librarians Guild/${author}/${title}/",
+      "directory": "Progressive Librarians Guild/${author|fs}/${title|fs}/",
       "overwrite": false
     }
   }

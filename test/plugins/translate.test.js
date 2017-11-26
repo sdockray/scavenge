@@ -43,7 +43,7 @@ test('translate.onData() - it replaces data[key] using regex in options[key].rep
   t.end()
 })
 
-test.only('translate.onData() - replace option replaces all instances of matching regex', (t) => {
+test('translate.onData() - replace option replaces all instances of matching regex', (t) => {
   const options = {
     raw: {
       replace: '\\w+',
@@ -54,6 +54,51 @@ test.only('translate.onData() - replace option replaces all instances of matchin
     raw: 'https://www.performancephilosophy.org/journal/issue/viewIssue/4/4'
   }
   const expectedOutput = { raw: 'a://a.a.a/a/a/a/a/a' }
+  const output = translate.onData(input, options)
+  t.same(output, expectedOutput)
+  t.end()
+})
+
+test('translate.onData() - options[key].split default true splits data[key] into arrays', (t) => {
+  const options = {
+    raw: {
+      split: true
+    }
+  }
+  const input = {
+    raw: 'Eve Kosofsky Sedgwick, 刘慈欣, Bojana Kunst'
+  }
+  const expectedOutput = { raw: ['Eve Kosofsky Sedgwick', ' 刘慈欣', ' Bojana Kunst'] }
+  const output = translate.onData(input, options)
+  t.same(output, expectedOutput)
+  t.end()
+})
+
+test('translate.onData() - options[key].split = token splits data[key] into arrays', (t) => {
+  const options = {
+    raw: {
+      split: ' '
+    }
+  }
+  const input = {
+    raw: 'Eve Kosofsky Sedgwick, 刘慈欣, Bojana Kunst'
+  }
+  const expectedOutput = { raw: ['Eve', 'Kosofsky', 'Sedgwick,', '刘慈欣,', 'Bojana', 'Kunst'] }
+  const output = translate.onData(input, options)
+  t.same(output, expectedOutput)
+  t.end()
+})
+
+test('translate.onData() - options[key].split also works with arrays', (t) => {
+  const options = {
+    raw: {
+      split: ' '
+    }
+  }
+  const input = {
+    raw: ['a b c', 'd e f', 'g e h']
+  }
+  const expectedOutput = { raw: [['a', 'b', 'c'], ['d', 'e', 'f'] , ['g', 'e', 'h']] }
   const output = translate.onData(input, options)
   t.same(output, expectedOutput)
   t.end()

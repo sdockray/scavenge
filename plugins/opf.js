@@ -48,10 +48,15 @@ function makeOpf (data, config) {
     const filepath = path.join(dir, file)
     mkdirp(dir, (err) => {
       if (err) return reject(err)
-      fs.writeFile(filepath, opf.toXML(), (e) => {
-        if (e) return reject(e)
-        resolve(data)
-      })
+      try {
+        const xml = opf.toXML()
+        fs.writeFile(filepath, xml, (e) => {
+          if (e) return reject(e)
+          resolve(data)
+        })
+      } catch (e) {
+        reject(e)
+      }
     })
   })
 }

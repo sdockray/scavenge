@@ -21,7 +21,7 @@
         "authors": "#authorString",
         "abstract": "#articleAbstract",
         "subjects": "#articleSubject",
-        "doi": "a#pub-id::doi",
+        "doi": "a[id^=pub-id]",
         "citations": ["#articleCitations > div p"],
         "pdf": "#articleFullText a:nth(1)@href"
       }
@@ -29,6 +29,15 @@
   },
   "actions": {
     "translate": {
+      "subjects": {
+        "replace": "Keywords\\s+",
+        "split": ";",
+        "transform": "trim"
+      },
+      "authors": {
+        "split": ",",
+        "transform": "trim"
+      },
       "full": {
         "replace": "viewIssue",
         "with": "download"

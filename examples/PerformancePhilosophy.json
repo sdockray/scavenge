@@ -1,14 +1,43 @@
 {
   "origin": "https://www.performancephilosophy.org/journal/issue/archive",
-  "delay": 1000,
+  "delay": 0,
   "find": "#content",
   "variables": {
     "issn": "div#pageFooter"
   },
   "next": {
-    "follow": "h4 a@href"
+    "follow": "h4 a@href:first",
+    "find": "table.tocArticle",
+    "variables": {
+      "issue": ".tocTitle ! table.tocArticle ! #main > h2",
+      "full": ".tocTitle ! table.tocArticle ! div#main .tocGalleys:first a@href",
+      "section": ".tocTitle a ! table.tocArticle !~ h4.tocSectionTitle:last"
+    },
+    "next": {
+      "follow": ".tocTitle a@href",
+      "find": "div#content",
+      "variables": {
+        "title": "#articleTitle h3",
+        "authors": "#authorString",
+        "abstract": "#articleAbstract",
+        "subjects": "#articleSubject",
+        "doi": "a#pub-id::doi",
+        "citations": ["#articleCitations > div p"],
+        "pdf": "#articleFullText a:nth(1)@href"
+      }
+    }
   },
   "actions": {
+    "translate": {
+      "full": {
+        "replace": "viewIssue",
+        "with": "download"
+      },
+      "pdf": {
+        "replace": "view",
+        "with": "download"
+      }
+    },
     "logger": true
   }
 }

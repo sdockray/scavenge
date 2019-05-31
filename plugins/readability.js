@@ -42,9 +42,9 @@ function download (data, config) {
                   .replace('{{TITLE}}', page.title)
               })
               page.close()
-              fs.writeFile(filepath, output, function(err) {
-                  if (err) throw err
-                  resolve(data)
+              fs.writeFile(filepath, output, function (err) {
+                if (err) throw err
+                resolve(data)
               })
             })
           })

@@ -1,10 +1,10 @@
-var _ = require('lodash')
+// var _ = require('lodash')
 var path = require('path')
 var mkdirp = require('mkdirp')
 var fs = require('fs')
 
-var utils = require('../lib/utils')
-var tpl = utils.tpl
+// var utils = require('../lib/utils')
+// var tpl = utils.tpl
 /*
   Config options
   filepath: where to save the file
@@ -16,7 +16,7 @@ var savePath
 function start (instructions, options) {
   return new Promise((resolve, reject) => {
     try {
-      savePath = (options.filepath) ? options.filepath : undefined
+      savePath = options.filepath ? options.filepath : undefined
       if (savePath) {
         console.log('Scrape data will be saved to', savePath)
       }
@@ -41,14 +41,16 @@ function addData (data, options) {
   })
 }
 
-function writeFile() {
+function writeFile () {
   return new Promise((resolve, reject) => {
     try {
       if (savePath) {
         console.log('Saving scrape data to:', savePath)
         mkdirp(path.dirname(savePath), function (err) {
           if (err) throw err
-          fs.writeFile(savePath, JSON.stringify(allData, null, " "), function(err) {
+          fs.writeFile(savePath, JSON.stringify(allData, null, ' '), function (
+            err
+          ) {
             if (err) throw err
             resolve(true)
           })
@@ -62,12 +64,7 @@ function writeFile() {
       resolve(false)
     }
   })
-
-
-
-
 }
-
 
 module.exports = {
   onStart: start,

@@ -56,7 +56,7 @@ if (instructions) {
   }
   if (cli.save) {
     // For now saving means that no actions will run except the save action
-    _.set(instructions, 'actions', {save: { filepath: cli.save }})
+    _.set(instructions, 'actions', { save: { filepath: cli.save } })
   }
   if (cli.load) {
     // For now saving means that no actions will run except the save action

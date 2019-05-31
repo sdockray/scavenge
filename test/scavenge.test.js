@@ -23,14 +23,14 @@ server('/find', function (url, req, res) {
   res.end()
 })
 
-test('scavenge.go(instructions - simple usage)', (t) => {
+test('scavenge.go(instructions - simple usage)', t => {
   const pluginStartFn = sinon.stub().callsFake(a => a)
   const pluginDataFn = sinon.stub().callsFake(a => a)
   const instructions = {
     origin: testDomain + '/find',
     find: 'img',
     variables: {
-      'img': '@src'
+      img: '@src'
     },
     actions: {
       'test-plugin': {
@@ -47,16 +47,35 @@ test('scavenge.go(instructions - simple usage)', (t) => {
       onStart: pluginStartFn,
       onData: pluginDataFn,
       onEnd: (data, options) => {
-        t.ok(pluginStartFn.calledOnce, 'a plugin’s onStart() is only called once')
-        t.ok(pluginStartFn.calledWith(instructions, options), 'a plugin’s onStart() is called with instructions and plugin options ')
-        t.same(pluginDataFn.callCount, 3, 'a plugin’s onData() is called for each data')
+        t.ok(
+          pluginStartFn.calledOnce,
+          'a plugin’s onStart() is only called once'
+        )
+        t.ok(
+          pluginStartFn.calledWith(instructions, options),
+          'a plugin’s onStart() is called with instructions and plugin options '
+        )
+        t.same(
+          pluginDataFn.callCount,
+          3,
+          'a plugin’s onData() is called for each data'
+        )
         const calls = pluginDataFn.getCalls()
-        t.ok(calls.every(call => call.args[0].img !== undefined && call.args[1] === options), 'each onData() is called with a data object and the plugins options')
-        t.same(options, {
-          foo: 'bar',
-          baz: 123,
-          yes: true
-        }, 'a plugin’s onEnd() receives the plugin options as as second arg')
+        t.ok(
+          calls.every(
+            call => call.args[0].img !== undefined && call.args[1] === options
+          ),
+          'each onData() is called with a data object and the plugins options'
+        )
+        t.same(
+          options,
+          {
+            foo: 'bar',
+            baz: 123,
+            yes: true
+          },
+          'a plugin’s onEnd() receives the plugin options as as second arg'
+        )
         t.end()
         return data
       }
@@ -65,38 +84,28 @@ test('scavenge.go(instructions - simple usage)', (t) => {
   scavenge.go(instructions)
 })
 
-test('scavenge.go(instructions) - it tries to resolve plugins at scavenge-plugin-{name}, {name} and ../plugins/{name}', (t) => {
+test('scavenge.go(instructions) - it tries to resolve plugins at scavenge-plugin-{name}, {name} and ../plugins/{name}', t => {
   t.timeoutAfter(500)
-  t.plan(3)
+  t.plan(2)
   const instructions = {
     origin: testDomain + '/find',
     find: 'img',
     variables: {
-      'img': '@src'
+      img: '@src'
     },
     actions: {
-      'translate': {},
-      'morph': {},
-      'download': {},
-      'notFound': {}
+      translate: {},
+      download: {},
+      notFound: {}
     }
   }
   const scavenge = proxyquire('../lib/scavenge', {
-    'translate': {
+    translate: {
       '@noCallThru': true,
       onStart: a => a,
       onData: a => a,
       onEnd: (data, options) => {
         t.pass('resolved translate as itself')
-        return data
-      }
-    },
-    'scavenge-plugin-morph': {
-      '@noCallThru': true,
-      onStart: a => a,
-      onData: a => a,
-      onEnd: (data, options) => {
-        t.pass('resolved morph as scavenger-plugin-morph')
         return data
       }
     },

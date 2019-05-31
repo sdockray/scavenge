@@ -52,7 +52,7 @@ function download (data, config) {
               var filename = path.basename(url)
               filepath = path.join(dir, filename)
               if (!overwrite && fs.existsSync(filepath)) return resolve(data)
-                // Stream downloaded file into filesystem
+              // Stream downloaded file into filesystem
               console.log('DIR Downloading', url, 'to', filepath)
               var req = request(url)
               var file = fs.createWriteStream(filepath)

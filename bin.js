@@ -1,9 +1,9 @@
 #!/usr/bin/env node
+var fs = require('fs')
 var cli = require('commander')
 var _ = require('lodash')
 var pkg = require('./package.json')
 var scavenge = require('.')
-
 var configuration
 var overrides = []
 
@@ -14,18 +14,26 @@ cli
   .usage('<configuration> [...overrides]')
   .action(function (c, ...o) {
     configuration = c
-    _.forEach(o, (override) => {
+    _.forEach(o, override => {
       if (_.isString(override)) {
         var parts = _.split(override, '=')
         if (parts.length === 2) overrides.push(parts)
       }
     })
   })
-  .description('Scrape a website according to JSON configuration and execute some actions with the data')
+  .description(
+    'Scrape a website according to JSON configuration and execute some actions with the data'
+  )
   .option('-u, --username <username>', 'Username to use in case of login')
   .option('-p, --password <password>', 'Password to use in case of login')
-  .option('-s, --save <save>', 'File to save scrape results to. No other actions will be executed')
-  .option('-l, --load <load>', 'File with scraped data to load. No scraping will be done.')
+  .option(
+    '-s, --save <save>',
+    'File to save scrape results to. No other actions will be executed'
+  )
+  .option(
+    '-l, --load <load>',
+    'File with scraped data to load. No scraping will be done.'
+  )
   .option('-z, --stop', 'Stops scavenge before executing any actions')
   .parse(process.argv)
 
@@ -40,7 +48,8 @@ if (configuration === 'undefined') {
 var instructions
 var data
 try {
-  instructions = require(configuration)
+  const raw = fs.readFileSync(configuration)
+  instructions = JSON.parse(raw)
 } catch (e) {
   console.log('Cannot require', configuration)
 }
